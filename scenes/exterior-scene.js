@@ -56,11 +56,8 @@ export class ExteriorScene {
 
         const { x, y, width, height } = this.doorHotspot;
 
-        ctx.fillStyle = '#05c46b';
-        ctx.fillRect(x, y, width, height);
-
         if (this.isHoveringDoor) {
-            ctx.fillStyle = rgba(255, 255, 255, 0.2);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
             ctx.fillRect(x, y, width, height);
             ctx.strokeStyle = '#ffd32a';
             ctx.lineWidth = 4;
