@@ -1,4 +1,4 @@
-import {spriteLoader} from '..\shared\sprite-loader.js';
+import { spriteLoader } from '../shared/sprite-loader.js';
 
 export class ExteriorScene {
     constructor(sceneManager) {
@@ -88,7 +88,7 @@ export class ExteriorScene {
         if ( 
             mouseX >= x &&
             mouseX <= x + width &&
-            mouseY >= &&
+            mouseY >= y &&
             mouseY <= y + height
         ) {
             console.log("entering lobby");

@@ -1,5 +1,5 @@
 export class SceneManager {
-    cosntructor(canvas, ctx) {
+    constructor(canvas, ctx) {
         this.canvas = canvas;
         this.ctx = ctx;
 
@@ -9,7 +9,7 @@ export class SceneManager {
         this.isTransitioning = false;
         this.transitionTime = 0;
         this.transitionDuration = 300;
-        this.transitionState = 'none'; 
+        this.transitionState = 'none';
     }
 
     changeScene(newScene) {
@@ -66,7 +66,7 @@ export class SceneManager {
                 alpha = 1 - (this.transitionTime / this.transitionDuration);
             }
 
-            alpha = Math.max(0 Math.min(1, alpha));
+            alpha = Math.max(0, Math.min(1, alpha));
 
             ctx.fillStyle = `rgba(0, 0, 0, ${alpha}')`;
             ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
