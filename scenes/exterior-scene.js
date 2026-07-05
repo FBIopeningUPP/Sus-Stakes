@@ -1,4 +1,5 @@
 import { spriteLoader } from '../shared/sprite-loader.js';
+import { LobbyScene } from './lobby-scene.js';
 
 export class ExteriorScene {
     constructor(sceneManager) {
@@ -18,9 +19,7 @@ export class ExteriorScene {
                 this.bgImage = img;
                 this.imageLoaded = true;
             }
-        } catch (e) {
-            console.warn("Asset 'assets/sprites/exterior.png' missing, falling back to palaceholder.");
-        }
+        } catch (e){}
         
         this.calculateHotspot();
     }
