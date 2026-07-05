@@ -45,10 +45,10 @@ export class ExteriorScene {
         if (this.imageLoaded && this.bgImage) {
             ctx.drawImage(this.bgImage, 0, 0, canvas.width, canvas.height);
         } else {
-            ctx.fillStyle = '';
+            ctx.fillStyle = '#1e272e';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.fillStyle = '';
+            ctx.fillStyle = '#485460';
             const bWidth = canvas.width * 0.6;
             const bHeight = canvas.height * 0.6;
             ctx.fillRect((canvas.width - bWidth) / 2, canvas.height - bHeight, bWidth, bHeight);
@@ -56,13 +56,13 @@ export class ExteriorScene {
 
         const { x, y, width, height } = this.doorHotspot;
 
-        ctx.fillStyle = '';
+        ctx.fillStyle = '#05c46b';
         ctx.fillRect(x, y, width, height);
 
         if (this.isHoveringDoor) {
-            ctx.fillStyle = '';
+            ctx.fillStyle = rgba(255, 255, 255, 0.2);
             ctx.fillRect(x, y, width, height);
-            ctx.strokeStyle = '';
+            ctx.strokeStyle = '#ffd32a';
             ctx.lineWidth = 4;
             ctx.strokeRect(x, y, width, height);
         }
