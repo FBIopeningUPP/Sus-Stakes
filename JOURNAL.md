@@ -57,3 +57,5 @@ i made a new game slots with tthe logic and everything
 will be adding a loan thing like lona shark where u can get loan when u are out of money
 
 added a loan shark which gives money
+
+now i will add a feature to reset my game where u can hard reset everything
