@@ -1,5 +1,6 @@
 import { PlayerController } from '../shared/player-controller.js';
 import { StubGame } from '../games/stub-games.js';
+import { BlackjackGame } from '../games/blackjack.js';
 
 export class LobbyScene {
     constructor(sceneManager, session, spawnPosition) {
@@ -42,6 +43,7 @@ export class LobbyScene {
             { id: 'slots', label: 'SLOTS', x: centerX + 50, y: centerY - 50, w: 64, h: 64 }
         ];
 
+        
         this.reach = 20;
         this.activeCabinet = null;
     }

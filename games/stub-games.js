@@ -36,10 +36,10 @@ export class StubGame {
         ctx.font = '32px monospace';
         ctx.textAlign = 'center';
 
-        ctx.fillText('PLAYING: ${this.gameId.toUpperCase()}', w / 2, h / 2 - 20);
+        ctx.fillText(`PLAYING: ${this.gameId.toUpperCase()}`, w / 2, h / 2 - 20);
         
         ctx.font = '20px monospace';
-        ctx.fillText('Press ESC to ext', w / 2, h / 2 + 30);
+        ctx.fillText("Press ESC to ext", w / 2, h / 2 + 30);
 
         ctx.textAlign = 'left';
     }

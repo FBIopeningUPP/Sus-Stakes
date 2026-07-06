@@ -37,3 +37,5 @@ so real progress is done
 ![alt text](screenshots\main-screen.png)
 ![alt text](screenshots\image.png)
 i have made the game select page and everything
+
+made the black jack game and will be integrating it properly so it can work good will be updating the lobby scene js
