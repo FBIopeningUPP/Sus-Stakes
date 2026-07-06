@@ -30,3 +30,5 @@ now when i click the main box the screen goes black maybe worflow issue adding a
 rewriting lobby scene so there is no bug
 
 re wrote the whole thing still have bugs will work on main.js
+
+the error are coming up so i used ai to debug it and i found out that i need to re write player controller js

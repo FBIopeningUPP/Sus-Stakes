@@ -40,12 +40,14 @@ canvas.addEventListener('click', (e) => {
 
 const exteriorScene = new ExteriorScene(sceneManager, session);
 sceneManager.currentScene = exteriorScene;
+if (exteriorScene.init) exteriorScene.init();
+
 let lastTime = performance.now();
-const timeStep = 1000 / 60; 
+const timeStep = 1000 / 60;
 let accumulatedTime = 0;
 
 function gameLoop(currentTime){
-    requestAnimationFrame(gameloop);
+    requestAnimationFrame(gameLoop);
 
     let deltaTime = currentTime - lastTime;
     lastTime = currentTime;
@@ -67,3 +69,5 @@ function gameLoop(currentTime){
         throw err;
     }
 }
+
+requestAnimationFrame(gameLoop);
