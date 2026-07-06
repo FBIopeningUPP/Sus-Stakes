@@ -51,3 +51,5 @@ card couting trainer
 session integration
 
 there were spelling mistakes and everything so i fixed this
+
+i made a new game slots with tthe logic and everything

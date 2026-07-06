@@ -1,6 +1,7 @@
 import { PlayerController } from '../shared/player-controller.js';
 import { StubGame } from '../games/stub-games.js';
 import { BlackjackGame } from '../games/blackjack.js';
+import { SlotsGame } from '../games/slots.js';
 
 export class LobbyScene {
     constructor(sceneManager, session, spawnPosition) {
@@ -13,6 +14,11 @@ export class LobbyScene {
         this.onKeyDown = (e) => {
             if (e.repeat) return;
             this.keys[e.key] = true;
+
+            if(e.key.toLowerCase() === 'r') {
+                this.session.bankroll = 3000;
+                this.session.save();
+            }
         };
         this.onKeyUp = (e) => {
             this.keys[e.key] = false;
@@ -86,9 +92,11 @@ export class LobbyScene {
 
             if (this.activeCabinet.id === 'blackjack') {
                 this.sm.changeScene(new BlackjackGame(this.sm, this.session, this.activeCabinet.id, returnPos));
+            } else if (this.activeCabinet.id === 'slots') {
+                this.sm.changeScene(new SlotsGame(this.sm, this.session, this.activeCabinet.id, returnPos));
             } else {
                 this.sm.changeScene(new StubGame(this.sm, this.session, this.activeCabinet.id, returnPos));
-            }
+                }
         }
     }
 
