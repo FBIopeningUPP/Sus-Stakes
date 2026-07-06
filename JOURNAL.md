@@ -62,6 +62,8 @@ now i will add a feature to reset my game where u can hard reset everything
 
 reset feature is added
 
+### July 7th
+
 the ui will be added with more depth added shadows and neon things
 
 will be adding a traanscation recorder that can basically a ledger
