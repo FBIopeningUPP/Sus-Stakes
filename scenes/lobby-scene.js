@@ -48,11 +48,19 @@ export class LobbyScene {
         ];
 
         this.cabinets = [
-            { id: 'blackjack', label: 'BLACKJACK', x: centerX - 100, y: centerY - 50, w: 64, h: 64 },
-            { id: 'slots', label: 'SLOTS', x: centerX + 50, y: centerY - 50, w: 64, h: 64 },
-            { id: 'shark', label: 'LOAN SHARK', x: 60 , y: 60, w: 64, h: 40 },
-            { id: 'ledger', label: 'LEDGER', x: centerX - 32, y: 60, w: 64, h: 40 }
+            { id: 'blackjack', label: 'BLACKJACK', x: centerX - 120, y: centerY - 50, w: 96, h: 96 },
+            { id: 'slots', label: 'SLOTS', x: centerX + 50, y: centerY - 50, w: 96, h: 96 },
+            { id: 'shark', label: 'LOAN SHARK', x: 60 , y: 60, w: 96, h: 96 },
+            { id: 'ledger', label: 'LEDGER', x: centerX - 32, y: 60, w: 96, h: 96 }
         ];
+
+        this.images = {};
+        const assetNames = ['player', 'blackjack', 'slots', 'shark', 'ledger'];
+        for (let name of assetNames) {
+            let img = new Image();
+            img.src = `assets/${name}.png`;
+            this.images[name] = img;
+        }
 
         this.reach = 20;
         this.activeCabinet = null;
@@ -127,10 +135,12 @@ export class LobbyScene {
         }
 
         for (let cab of this.cabinets) {
-            if (cab.id === 'shark') ctx.fillStyle = '#7f8c8d';
-            else if (cab.id === 'ledger') ctx.fillStyle = '#2ecc71';
-            else ctx.fillStyle = '#f1c40f';
-            ctx.fillRect(cab.x, cab.y, cab.w, cab.h);
+            if (this.images[cab.id] && this.images[cab.id].complete && this.images[cab.id].naturalWidth > 0) {
+                ctx.drawImage(this.images[cab.id], cab.x, cab.y, cab.w, cab.h);
+            } else {
+                ctx.fillStyle = '#f1c40f';
+                ctx.fillRect(cab.x, cab.y, cab.w, cab.h);
+            }
 
             ctx.fillStyle = '#fff';
             ctx.font = '14px monospace';
@@ -138,7 +148,7 @@ export class LobbyScene {
             ctx.fillText(cab.label, cab.x, cab.y - 10);
         }
 
-        this.player.render(ctx);
+        this.player.render(ctx, this.images['player']);
 
         if (this.activeCabinet) {
             ctx.fillStyle = '#2ecc71';

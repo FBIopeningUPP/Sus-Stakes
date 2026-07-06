@@ -49,17 +49,12 @@ export class PlayerController {
         return false;
     }
 
-    render(ctx) {
-        ctx.fillStyle = '#ff4757';
-        ctx.fillRect(this.x, this.y, this.w, this.h);
-
-        ctx.fillStyle = '#000';
-        let ex = this.x + 14, ey = this.y + 14;
-        if (this.facing === 'left') ex = this.x + 4;
-        if (this.facing === 'right') ex = this.x + 24;
-        if (this.facing === 'up') ey = this.y + 4;
-        if (this.facing === 'down') ey = this.y + 24;
-
-        ctx.fillRect(ex, ey, 4, 4);
+    render(ctx, img) {
+        if (img && img.complete) {
+            ctx.drawImage(img, this.x - 16, this.y - 32, 64, 64);
+        } else {
+            ctx.fillStyle = '#e74c3c';
+            ctx.fillRect(this.x, this.y, 32, 32);
+        }
     }
 }
