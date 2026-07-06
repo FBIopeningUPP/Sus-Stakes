@@ -39,3 +39,15 @@ so real progress is done
 i have made the game select page and everything
 
 made the black jack game and will be integrating it properly so it can work good will be updating the lobby scene js
+
+see  implemented the things like 6 deck shoe
+full state machine like the betting dealing player turn dealer turn and payout
+betting ui 
+player actions
+correct soft hard ace logic
+dealer ai 
+natural blackjack detection
+card couting trainer
+session integration
+
+there were spelling mistakes and everything so i fixed this

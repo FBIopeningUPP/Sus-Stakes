@@ -43,7 +43,6 @@ export class LobbyScene {
             { id: 'slots', label: 'SLOTS', x: centerX + 50, y: centerY - 50, w: 64, h: 64 }
         ];
 
-        
         this.reach = 20;
         this.activeCabinet = null;
     }
@@ -85,7 +84,11 @@ export class LobbyScene {
                 facing: this.player.facing
             };
 
-            this.sm.changeScene(new StubGame(this.sm, this.session, this.activeCabinet.id, returnPos));
+            if (this.activeCabinet.id === 'blackjack') {
+                this.sm.changeScene(new BlackjackGame(this.sm, this.session, this.activeCabinet.id, returnPos));
+            } else {
+                this.sm.changeScene(new StubGame(this.sm, this.session, this.activeCabinet.id, returnPos));
+            }
         }
     }
 

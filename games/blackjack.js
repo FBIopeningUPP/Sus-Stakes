@@ -146,7 +146,7 @@ export class BlackjackGame {
         this.dealerHand.cards.push(this.drawCard(true));
 
         const pTot = this.getHandTotal(this.playerHands[0].cards).total;
-        const dTot = this.getHandTotal(this.dealerHand.carrds).total;
+        const dTot = this.getHandTotal(this.dealerHand.cards).total;
 
         const pIsBJ = (pTot === 21);
         const dIsBJ = (dTot === 21);
@@ -163,7 +163,7 @@ export class BlackjackGame {
     }
 
     advancePlayerHand() {
-        tis.activeHandIndex++;
+        this.activeHandIndex++;
         if (this.activeHandIndex >= this.playerHands.length) {
             this.state = 'DEALER_TURN';
         }
@@ -183,7 +183,7 @@ export class BlackjackGame {
 
                 while (dTot.total < 17 || (dTot.total === 17 && dTot.isSoft)) {
                     this.dealerHand.cards.push(this.drawCard());
-                    dTot = this.getHandTotal
+                    dTot = this.getHandTotal(this.dealerHand.cards);
                 }
             }
 
@@ -242,7 +242,7 @@ export class BlackjackGame {
             hand.result = result;
             hand.payout = payout;
 
-            this.sessioon.addTransaction(this.gameId, hand.bet, payout);
+            this.session.addTransaction(this.gameId, hand.bet, payout);
         }
         this.state = 'PAYOUT';
     }
@@ -257,7 +257,7 @@ export class BlackjackGame {
             if (hit(W/2 - 120, H - 100, 40, 40)) {
                 this.currentBet = Math.max(10, this.currentBet - 10);
             }
-            if (hit(W2 + 80 ,H - 100, 40, 40)) {
+            if (hit(W/2 + 80, H - 100, 40, 40)) {
                 this.currentBet = Math.min(this.session.bankroll, this.currentBet + 10);
             }
             if (hit(W/2 - 50, H - 50, 100, 40)) {
@@ -360,12 +360,12 @@ export class BlackjackGame {
         ctx.textAlign = 'right';
         ctx.fillText(`Trainer [C]: ${this.trainerMode ? 'ON' : 'OFF'}`, W - 20, 30);
 
-        if (this.state === 'BETTING') {
+        if (this.state !== 'BETTING') {
             ctx.textAlign = 'center';
             ctx.fillText('DEALER', W/2, 80);
             let startX = W/2 - ((this.dealerHand.cards.length * 60) / 2) + 5;
             for (let i = 0; i < this.dealerHand.cards.length; i++) {
-                const isHole = (i === 1 && !this.dealerHand.holeReveled);
+                const isHole = (i === 1 && !this.dealerHand.holeRevealed);
                 this.drawCardGraphic(ctx, this.dealerHand.cards[i], startX + i * 60, 100, isHole);
             }
             if (this.dealerHand.holeRevealed) {
@@ -394,7 +394,7 @@ export class BlackjackGame {
                 ctx.fillText(`Total: ${pTot.total}${pTot.isSoft && pTot.total <= 21 ? ' (Soft)' : ''}`, px, yOff);
 
                 if (hand.result) {
-                    ctx.fillStyle = (hand.payout > hand.bet) ? '#2ecc71' : (hand.payout < hand.bet) ? '#f1c40f' : '#e74c3c';
+                    ctx.fillStyle = (hand.payout > hand.bet) ? '#2ecc71' : (hand.payout === hand.bet) ? '#f1c40f' : '#e74c3c';
                     ctx.fillText(`${hand.result}`, px, yOff + 25);
                 }
                 px += handWidth;
@@ -403,7 +403,7 @@ export class BlackjackGame {
 
         if (this.state === 'BETTING') {
             ctx.textAlign = 'center';
-            ctx.fillText = '#fff';
+            ctx.fillStyle = '#fff';
             ctx.font = '30px monospace';
             ctx.fillText('PLACE YOUR BET', W/2, H/2);
             this.drawButton(ctx, W/2 - 120, H - 100, 40, 40, '-', '#34495e');
@@ -448,7 +448,7 @@ export class BlackjackGame {
                 ctx.fillStyle = '#fff';
                 ctx.textAlign = 'left';
 
-                const decksRem = Math.max(1, (312 - this.cardsDealth) / 52);
+                const decksRem = Math.max(1, (312 - this.cardsDealt) / 52);
                 const trueCount = Math.round((this.runningCount / decksRem) * 10) / 10;
 
                 ctx.fillText(`Running Count: ${this.runningCount}`, 30, H - 100);
