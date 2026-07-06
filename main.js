@@ -1,5 +1,6 @@
 import { SceneManager } from './shared/scene-manager.js';
 import { ExteriorScene } from './scenes/exterior-scene.js';
+import { CasinoSession } from './shared/casino-session.js';
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
@@ -9,19 +10,20 @@ ctx.imageSmoothingEnabled = false;
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-
     ctx.imageSmoothingEnabled = false;
 }
 
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-const sceneManager = new SceneManager(canvas, ctx);
+const session = new CasinoSession();
+session.load();
 
+const sceneManager = new SceneManager(canvas, ctx);
 const mouse = { x: 0, y: 0 };
 
 canvas.addEventListener('mousemove', (e) => {
-    const rect = canvas.getBoundingClientRect
+    const rect = canvas.getBoundingClientRect();
     mouse.x = e.clientX - rect.left;
     mouse.y = e.clientY - rect.top;
 
@@ -36,8 +38,7 @@ canvas.addEventListener('click', (e) => {
     }
 });
 
-const exteriorScene = new ExteriorScene(sceneManager);
-
+const exteriorScene = new ExteriorScene(sceneManager, session);
 sceneManager.currentScene = exteriorScene;
 if (exteriorScene.init) exteriorScene.init();
 
@@ -54,6 +55,8 @@ function gameLoop(currentTime) {
     if (deltaTime > 250) {
         deltaTime = 250;
     }
+
+    accumulatedTime += deltaTime;
 
     while (accumulatedTime >= timeStep) {
         sceneManager.update(timeStep);

@@ -1,6 +1,6 @@
 import { LobbyScene } from '../scenes/lobby-scene.js';
 
-export class StubGames {
+export class StubGame {
     constructor(sceneManager, session, gameId, returnPosition) {
         this.sm = sceneManager;
         this.session = session;

@@ -2,7 +2,7 @@ import { spriteLoader } from '../shared/sprite-loader.js';
 import { LobbyScene } from './lobby-scene.js';
 
 export class ExteriorScene {
-    constructor(sceneManager) {
+    constructor(sceneManager, session) {
         this.sceneManager = sceneManager;
         this.bgImage = null;
         this.imageLoaded = false;
@@ -14,19 +14,16 @@ export class ExteriorScene {
     async init() {
         try {
             const img = await spriteLoader.loadImage('assets/sprites/exterior.png');
-            
             if (img.width > 0) {
                 this.bgImage = img;
                 this.imageLoaded = true;
             }
         } catch (e){}
-        
         this.calculateHotspot();
     }
 
     calculateHotspot() {
         const canvas = this.sceneManager.canvas;
-
         const width = canvas.width * 0.15;
         const height = canvas.height * 0.20;
         const x = (canvas.width / 2) - (width / 2);
@@ -56,6 +53,9 @@ export class ExteriorScene {
 
         const { x, y, width, height } = this.doorHotspot;
 
+        ctx.fillStyle = '#05c46b';
+        ctx.fillRect(x, y, width, height);
+
         if (this.isHoveringDoor) {
             ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
             ctx.fillRect(x, y, width, height);
@@ -67,12 +67,9 @@ export class ExteriorScene {
 
     handleHover(mouseX, mouseY) {
         const { x, y, width, height} = this.doorHotspot;
-
         this.isHoveringDoor = (
-            mouseX >= x &&
-            mouseX <= x + width &&
-            mouseY >= y &&
-            mouseY <= y + height
+            mouseX >= x && mouseX <= x + width &&
+            mouseY >= y && mouseY <= y + height
         );
     }
 
@@ -87,10 +84,10 @@ export class ExteriorScene {
             mouseY >= y &&
             mouseY <= y + height
         ) {
-            console.log("entering lobby");
+            this.sceneManager.changeScene(new LobbyScene(this.sceneManager, this.session));
         }
     }
-
+    
     cleanup() {
         this.isHoveringDoor = false;
     }

@@ -26,16 +26,16 @@ export class PlayerController {
         if (keys.ArrowUp || keys.w) dy -= this.speed * dt;
         if (keys.ArrowDown || keys.s) dy += this.speed * dt;
 
-        if (dx < 0) this.facing
+        if (dx < 0) this.facing = 'left';
         else if (dx > 0) this.facing = 'right';
         if (dy < 0) this.facing = 'up';
         else if (dy > 0) this.facing = 'down';
 
         this.x += dx;
-        if (this.checkCollision(colliders)) this.x -= dx;
+        if (this.checkCollisions(colliders)) this.x -= dx;
 
         this.y += dy;
-        if (this.checkCollision(colliders)) this.y -= dy;
+        if (this.checkCollisions(colliders)) this.y -= dy;
     }
 
     checkCollisions(colliders) {
@@ -50,7 +50,7 @@ export class PlayerController {
     }
 
     render(ctx) {
-        ctx.fillStyle = '';
+        ctx.fillStyle = '#ff4757';
         ctx.fillRect(this.x, this.y, this.w, this.h);
 
         ctx.fillStyle = 'black';

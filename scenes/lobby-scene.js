@@ -1,18 +1,27 @@
 import { PlayerController } from '../shared/player-controller.js';
-import { StubGame } from '../games/stub-game.js';
+import { StubGame } from '../games/stub-games.js';
 
 export class LobbyScene {
-    constructor(sceneManager) {
+    constructor(sceneManager, session, spawnPosition) {
         this.sm = sceneManager;
         this.canvas = sceneManager.canvas;
+        this.session = session;
 
         this.keys = {};
 
-        this.onKeyDown = (e) => this.keys[e.key] = true;
-        this.onKeyUp = (e) => this.keys[e.key] = false;
+        this.onKeyDown = (e) => {
+            if (e.repeat) return;
+            this.keys[e.key] = true;
+        };
+        this.onKeyUp = (e) => {
+            this.keys[e.key] = false;
+        };
 
-        this.player = new PlayerController(this.canvas.width / 2-16, this.canvas.height - 80);
-        this.savedState = null;
+        const startX = spawnPosition ? spawnPosition.x : this.canvas.width / 2 - 16;
+        const startY = spawnPosition ? spawnPosition.y : this.canvas.height - 80;
+
+        this.player = new PlayerController(startX, startY);
+        if (spawnPosition) this.player.facing = spawnPosition.facing;
 
         const w = this.canvas.width;
         const h = this.canvas.height;
@@ -65,12 +74,13 @@ export class LobbyScene {
             this.keys['e'] = false;
             this.keys['E'] = false;
             
-            console.log(`entering ${this.activeCabinet.id}`);
-            this.savedState = {
+            const returnPos = {
                 x: this.player.x,
                 y: this.player.y,
                 facing: this.player.facing
             };
+
+            this.sm.changeScene(new StubGame(this.sm, this.session, this.activeCabinet.id, returnPos));
         }
     }
     

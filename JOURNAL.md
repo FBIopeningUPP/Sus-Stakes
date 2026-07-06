@@ -22,3 +22,6 @@ stub games js game screen to test the enter play exit work flow to know if the l
 lobby scene js modifiyied it so i can check the interacting
 casio session js tracks the bank account for the monay all the big monay
 game interface js just there to know what block is doing what
+
+player controller. js had issues where check collsion was not a function and there was mistake fixed it
+and now the work flow is working it was just the issue with a spelling mistake with collider where s was missing
