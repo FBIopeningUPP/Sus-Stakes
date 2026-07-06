@@ -10,6 +10,9 @@ import { LobbyScene } from './lobby-scene.js';
 
             this.doorHotspot = { x: 0, y: 0, width: 0, height: 0 };
             this.isHoveringDoor = false;
+
+            this.playerImg = new Image();
+            this.playerImg.src = 'assets/player.png';
         }
 
         async init() {
@@ -55,8 +58,12 @@ import { LobbyScene } from './lobby-scene.js';
 
             const { x, y, width, height } = this.doorHotspot;
 
-            ctx.fillStyle = '#05c46b';
-            ctx.fillRect(x, y, width, height);
+            if (this.playerImg && this.playerImg.complete && this.playerImg.naturalHeight > 0) {
+                ctx.drawImage(this.playerImg, x, y, width, height);
+            } else {
+                ctx.fillStyle = '#05c46b';
+                ctx.fillRect(x, y, width, height);
+            }
 
             if (this.isHoveringDoor) {
                 ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';

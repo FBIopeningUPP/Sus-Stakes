@@ -76,3 +76,10 @@ i will refine the ledger more, re writing ledger with better ammount and everyth
 downloaded images from random sources and random gambling websites and games so i can use them in my project 😁
 
 changed the images with removed background made stuff bigger and major stuff is done
+
+i will be fixing the main green box on screen with the main character png file
+
+https://www.kenney.nl/assets/playing-cards-pack downloaded these assets
+https://www.kenney.nl/assets/kenney-fonts and this font
+
+will be upadting my code with this cards are not appearing properly going to be fix it

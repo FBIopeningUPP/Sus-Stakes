@@ -6,6 +6,20 @@ export class BlackjackGame {
         this.session = session;
         this.gameId = gameId; 
         this.returnPosition = returnPosition;
+        
+        this.cardCache = {};
+        this.cardBack = new Image();
+        this.cardBack.src = 'assets/cards/card_back.png';
+        const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+        const ranks = ['02', '03', '04', '05', '06', '07', '08', '09', '10', 'J', 'Q', 'K', 'A'];
+
+        for (let s of suits) {
+            for (let r of ranks) {
+                let img = new Image();
+                img.src = `assets/cards/card_${s}_${r}.png`;
+                this.cardCache[`${r}_${s}`] = img;
+            }
+        }
 
         this.shoe = [];
         this.runningCount = 0;
@@ -325,26 +339,26 @@ export class BlackjackGame {
     }
 
     drawCardGraphic(ctx, card, x, y, faceDown = false) {
-        ctx.fillStyle = faceDown ? '#2980b9' : '#fff';
-        if (ctx.roundRect) {
-            ctx.beginPath(); ctx.roundRect(x, y, 50, 70, 5); ctx.fill();
-        } else {
-            ctx.fillRect(x, y, 50, 70);
-            ctx.strokeStyle = '#000';
-        }
+        if (faceDown) {
+            if (this.cardBack && this.cardBack.complete && this.cardBack.naturalWidth > 0) {
+                ctx.drawImage(this.cardBack, x, y, 64, 90);
+            }
+        } else if (card) {
+            let suitMap = { 'H': 'hearts', 'D': 'diamonds', 'C': 'clubs', 'S': 'spades' };
 
-        if (!faceDown && card) {
-            ctx.fillStyle = (card.suit === 'H' || card.suit === 'D') ? '#e74c3c' : '#2c3e50';
-            ctx.font = 'bold 18px monospace';
-            ctx.textAlign = 'left';
-            ctx.fillText(card.rank, x + 5, y + 20);
+            let r = card.rank.toString();
+            if (r !== '10' && r !== 'J' && r !== 'Q' && r !== 'K' && r !== 'A') r = '0' + r;
 
-            const suits = { 'H': '♥', 'D': '♦', 'C': '♣', 'S': '♠' };
-            ctx.font = 'bold 24px monospace';
-            ctx.fillText(suits[card.suit], x + 5, y + 50);
+            let imgKey = `${suitMap[card.suit]}_${r}`;
+            let img = this.cardCache[imgKey];
+
+            if (img && img.complete && img.naturalWidth > 0) {
+                ctx.drawImage(img, x, y, 64, 90);
+            }
         }
     }
 
+    
     render(ctx) {
         const W = this.sm.canvas.width;
         const H = this.sm.canvas.height;
