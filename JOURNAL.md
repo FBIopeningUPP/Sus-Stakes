@@ -68,3 +68,5 @@ will be adding a traanscation recorder that can basically a ledger
 
 ![alt text](screenshots\some.png)
 ![alt text](screenshots\ledger.png)
+
+i will refine the ledger more
