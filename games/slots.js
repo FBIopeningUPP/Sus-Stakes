@@ -112,10 +112,10 @@ export class SlotsGame {
             if (hit(W/2 - 120, H - 100, 40, 40)) {
                 this.currentBet = Math.max(10, this.currentBet - 10);
             }
-            if (hit(W/2 - 60, H - 100, 40, 40)) {
+            if (hit(W/2 + 80, H - 100, 40, 40)) {
                 this.currentBet = Math.min(this.session.bankroll, this.currentBet + 10);
             }
-            if (hit(W/2 + 20, H - 100, 80, 40)) {
+            if (hit(W/2 - 50, H - 50, 100, 40)) {
                 if (this.session.bankroll >= this.currentBet) {
                     this.startSpin();
                 }
