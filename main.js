@@ -19,36 +19,34 @@ resizeCanvas();
 const session = new CasinoSession();
 session.load();
 
-const sceneManager = new SceneManager(canvas, ctx);
+const sceneManager = new SceneManager(ctx, session);
 const mouse = { x: 0, y: 0 };
 
 canvas.addEventListener('mousemove', (e) => {
     const rect = canvas.getBoundingClientRect();
-    mouse.x = e.clientX - rect.left;
+    mouse.x  = e.clientX - rect.left;
     mouse.y = e.clientY - rect.top;
 
-    if (sceneManager.currentScene && sceneManager.currentScene.handleHover) {
+    if (sceneManager.currentScene && sceneManager.currentScene.handleHover){
         sceneManager.currentScene.handleHover(mouse.x, mouse.y);
     }
 });
 
 canvas.addEventListener('click', (e) => {
-    if (sceneManager.currentScene && sceneManager.currentScene.handleClick) {
+    if (sceneManager.currentScene && sceneManger.currentScene.handleClick){
         sceneManager.currentScene.handleClick(mouse.x, mouse.y);
     }
 });
 
 const exteriorScene = new ExteriorScene(sceneManager, session);
 sceneManager.currentScene = exteriorScene;
-if (exteriorScene.init) exteriorScene.init();
-
 let lastTime = performance.now();
 const timeStep = 1000 / 60; 
 let accumulatedTime = 0;
 
-function gameLoop(currentTime) {
-    requestAnimationFrame(gameLoop);
-    
+function gameLoop(currentTime){
+    requestAnimationFrame(gameloop);
+
     let deltaTime = currentTime - lastTime;
     lastTime = currentTime;
 
@@ -58,12 +56,14 @@ function gameLoop(currentTime) {
 
     accumulatedTime += deltaTime;
 
-    while (accumulatedTime >= timeStep) {
-        sceneManager.update(timeStep);
-        accumulatedTime -= timeStep;
+    try {
+        while (accumulatedTime >= timeStep) {
+            sceneManager.update(timeStep);
+            accumulatedTime -= timeStep;
+        }
+        sceneManager.render();
+    }   catch (error) {
+        alert("GAME CRASHED!\nError: " + err.message + "\n\nStack:\n" + err.stack);
+        throw err;
     }
-    
-    sceneManager.render(ctx);
 }
-
-requestAnimationFrame(gameLoop);
