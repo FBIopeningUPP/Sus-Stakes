@@ -46,7 +46,8 @@ export class LobbyScene {
 
         this.cabinets = [
             { id: 'blackjack', label: 'BLACKJACK', x: centerX - 100, y: centerY - 50, w: 64, h: 64 },
-            { id: 'slots', label: 'SLOTS', x: centerX + 50, y: centerY - 50, w: 64, h: 64 }
+            { id: 'slots', label: 'SLOTS', x: centerX + 50, y: centerY - 50, w: 64, h: 64 },
+            { id: 'shark', label: 'LOAN SHARK', x: 60 , y: 60, w: 64, h: 40 }
         ];
 
         this.reach = 20;
@@ -97,6 +98,16 @@ export class LobbyScene {
             } else {
                 this.sm.changeScene(new StubGame(this.sm, this.session, this.activeCabinet.id, returnPos));
                 }
+            if (this.activeCabinet.id === 'shark') {
+                if (this.session.bankroll < 50) {
+                    this.session.takeLoan();
+                    alert("SHARK: BOI HERE's YO 1000 dolla dolla, now you owe me 1500 dolla dolla, i will be grabbing all yo 20% form yo win");
+                } else {
+                    alert("SHARK: You still got chips. Come back when you're actually broke, kid.");
+                }
+            } else if (this.activeCabinet.id === 'blackjack') {
+                this.sm.changeScene(new BlackjackGame(this.sm, this.session, this.activeCabinet.id, returnPos));
+            }
         }
     }
 
@@ -107,23 +118,35 @@ export class LobbyScene {
         ctx.fillStyle = '#95a5a6';
         for (let w of this.walls) ctx.fillRect(w.x, w.y, w.w, w.h);
 
+        ctx.fillStyle = '#fff';
+        ctx.font = '20px monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText(`Bankroll: $${this.session.bankroll}`, 20, 30);
+
+        if (this.session.debt > 0) {
+            ctx.fillStyle = '#e74c3c';
+            ctx.fillText(`Debt: $${this.session.debt}`, 20, 60);
+        }
+
         for (let cab of this.cabinets) {
-            ctx.fillStyle = '#f1c40f'; // Bright yellow
+            ctx.fillStyle = cab.id === 'shark' ? '#7f8c8d' : '#f1c40f';
             ctx.fillRect(cab.x, cab.y, cab.w, cab.h);
 
             ctx.fillStyle = '#fff';
             ctx.font = '14px monospace';
+            ctx.textAlign = 'left';
             ctx.fillText(cab.label, cab.x, cab.y - 10);
         }
 
         this.player.render(ctx);
 
         if (this.activeCabinet) {
-            ctx.fillStyle = '#2ecc71'; // Bright green text
+            ctx.fillStyle = '#2ecc71';
             ctx.font = '18px monospace';
-            ctx.fillText("Press E to play", this.activeCabinet.x - 20, this.activeCabinet.y - 30);
+            ctx.textAlign = 'left';
+
+            ctx.fillText("Press E to interact", this.activeCabinet.x - 20, this.activeCabinet.y - 30);
         }
     }
-
     handleClick(x, y) {}
 }

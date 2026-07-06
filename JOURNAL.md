@@ -53,3 +53,7 @@ session integration
 there were spelling mistakes and everything so i fixed this
 
 i made a new game slots with tthe logic and everything
+
+will be adding a loan thing like lona shark where u can get loan when u are out of money
+
+added a loan shark which gives money

@@ -9,6 +9,7 @@ export class CasinoSession {
         if (data) {
             const parsed = JSON.parse(data);
             this.bankroll = parsed.bankroll ?? 1000;
+            this.debt = parsed.debt ?? 0;
             this.transactions = parsed.transactions || [];
         }
     }
@@ -16,18 +17,28 @@ export class CasinoSession {
     save() {
         localStorage.setItem('sus_stakes_session', JSON.stringify({
             bankroll: this.bankroll,
+            debt: this.debt,
             transactions: this.transactions
         }));
     }
 
     addTransaction(game, wager, payout) {
-        this.bankroll += (payout - wager);
-        this.transactions.push({
-            game, 
-            wager, 
-            payout,
-            timestamp: Date.now()
-        });
+        let netProfit = payout - wager;
+
+        if (netProfit < 0 && this.debt > 0) {
+            const sharkCut = Math.min(this.debt, Math.ceil(netProfit * 0.20));
+            this.debt -= sharkCut;
+            netProfit += sharkCut;
+        }
+
+        this.bankroll += netProfit;
+        this.transactions.push({ game, wager, payout, timestamp: Date.now() });
+        this.save();
+    }
+
+    takeLoan() {
+        this.bankroll += 1000;
+        this.debt += 1500;
         this.save();
     }
 }
