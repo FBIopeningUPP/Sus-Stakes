@@ -71,4 +71,6 @@ will be adding a traanscation recorder that can basically a ledger
 ![alt text](screenshots\some.png)
 ![alt text](screenshots\ledger.png)
 
-i will refine the ledger more
+i will refine the ledger more, re writing ledger with better ammount and everything
+
+downloaded images from random sources and random gambling websites and games so i can use them in my project 😁

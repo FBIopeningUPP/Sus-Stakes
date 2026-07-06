@@ -22,31 +22,38 @@ export class LedgerTerminal {
         let w = this.sm.canvas.width;
         let h = this.sm.canvas.height;
 
-        ctx.fillStyle = '#0f0f0f';
+        ctx.fillStyle = '#0a0a0a';
         ctx.fillRect(0, 0, w, h);
 
-        ctx.fillStyle = '#00ff00';
         ctx.font = 'bold 24px monospace';
-        ctx.textAlign = 'center';
-        ctx.fillText('== SUS STAKES LEDGER ==', w/2, 40);
-
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#fff';
+        ctx.fillText('SUS STAKES PORTFOLIO', 40, 40);
         ctx.font = '14px monospace';
-        ctx.fillStyle = '#aaa';
-        ctx.fillText('Press ESC to exit terminal', w/2, 65);
+        ctx.fillStyle = '#666';
+        ctx.fillText('Press ESC to exit', 40, 60);
 
-        let pad = 80;
-        let cw = w - pad*2;
-        let ch = h - pad*2;
+        let pad = 60;
+        let cw = w - pad * 2;
+        let ch = h - pad * 2;
         let cy = h - pad;
 
-        ctx.strokeStyle = '#333';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(pad, cy, cw, ch);
+        ctx.strokeStyle = '#1a1a1a';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        for(let i=0; i<=4; i++) {
+            let y = pad + (i/4)*ch;
+            ctx.moveTo(pad, y);
+            ctx.lineTo(pad + cw, y);
+        }
+
+        ctx.stroke();
 
         let txs = this.session.transactions || [];
         if (txs.length === 0) {
-            ctx.fillStyle = '#00ff00';
-            ctx.fillText('NO DATA. GO GAMBLE.', w/2, h/2);
+            ctx.fillStyle = '#666';
+            ctx.textAlign = 'center';
+            ctx.fillText('AWAITING TRADES...', w/2, h/2);
             return;
         }
 
@@ -54,10 +61,8 @@ export class LedgerTerminal {
 
         let curr = this.session.bankroll;
         let hist = [curr];
-
         for (let i = txs.length - 1; i >= 0; i--) {
-            let t = txs[i];
-            curr -= (t.payout - t.wager);
+            curr -= (txs[i].payout - txs[i].wager);
             hist.push(curr);
         }
         hist.reverse();
@@ -65,13 +70,19 @@ export class LedgerTerminal {
         let maxVal = Math.max(...hist, 1500);
         let minVal = Math.min(...hist, 0);
 
+        let isUp = hist[hist.length - 1] >= hist[0];
+        let themeColor = isUp ? '#00ff55' : '#ff2255';
+
         ctx.beginPath();
-        ctx.strokeStyle = '#00ff00';
+        ctx.strokeStyle = themeColor;
         ctx.lineWidth = 3;
+
+        let pts = [];
 
         for (let i = 0; i < hist.length; i++) {
             let px = pad + (i / Math.max(1, hist.length - 1)) * cw;
             let py = cy - ((hist[i] - minVal) / (maxVal - minVal)) * ch;
+            pts.push({x: px, y: py});
 
             if (i === 0) ctx.moveTo(px, py);
             else ctx.lineTo(px, py);
@@ -79,15 +90,33 @@ export class LedgerTerminal {
 
         ctx.stroke();
 
-        let lastVal = hist[hist.length - 1];
-        let lastY = cy - ((lastVal - minVal) / (maxVal - minVal)) * ch;
+        let grad = ctx.createLinearGradient(0, pad, 0, cy);
+        grad.addColorStop(0, isUp ? 'rgba(0, 255, 85, 0.4)' : 'rgba(255, 34, 85, 0.4)');
+        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
-        ctx.fillStyle = '#fff';
-        ctx.beginPath();
-        ctx.arc(pad + cw, lastY, 5, 0, Math.PI * 2);
+        ctx.lineTo(pts[pts.length - 1].x, cy);
+        ctx.lineTo(pts[0].x, cy);
+        ctx.fillStyle = grad;
         ctx.fill();
 
-        ctx.textAlign = 'left';
-        ctx.fillText(`$${lastVal}`, pad + cw + 10, lastY + 5);
+        let lastPt = pts[pts.length - 1];
+        ctx.shadowColor = themeColor;
+        ctx.shadowBlur = 15;
+        ctx.fillStyle = themeColor;
+        ctx.beginPath();
+        ctx.arc(lastPt.x, lastPt.y, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 36px monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText(`$${hist[hist.length-1]}`, w - 40, 50);
+
+        let diff = hist[hist.length-1] - hist[0];
+        ctx.font = '18px monospace';
+        ctx.fillStyle = themeColor;
+        let sign = diff >= 0 ? '+' : '';
+        ctx.fillText(`${sign}$${diff}`, w - 40, 80);
     }
 }
