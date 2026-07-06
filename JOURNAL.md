@@ -28,3 +28,5 @@ and now the work flow is working it was just the issue with a spelling mistake w
 
 now when i click the main box the screen goes black maybe worflow issue adding a console log so i can know what is happening
 rewriting lobby scene so there is no bug
+
+re wrote the whole thing still have bugs will work on main.js
