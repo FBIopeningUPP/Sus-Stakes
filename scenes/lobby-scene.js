@@ -1,4 +1,5 @@
 import { PlayerController } from '../shared/player-controller.js';
+import { StubGame } from '../games/stub-game.js';
 
 export class LobbyScene {
     constructor(sceneManager) {
