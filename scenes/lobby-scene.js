@@ -4,23 +4,24 @@ import { StubGame } from '../games/stub-games.js';
 export class LobbyScene {
     constructor(sceneManager, session, spawnPosition) {
         this.sm = sceneManager;
-
-        this.canvas = sceneManager.canvas || document.createElementById('game-canvas');
+        this.canvas = sceneManager.canvas || document.getElementById('gameCanvas');
         this.session = session;
 
         this.keys = {};
-        
+
         this.onKeyDown = (e) => {
             if (e.repeat) return;
-            this.keys[e.code] = true;
+            this.keys[e.key] = true;
         };
-
         this.onKeyUp = (e) => {
-            this.keys[e.code] = false;
+            this.keys[e.key] = false;
         };
 
-        const startX = spawnPosition ? spawnPosition.x : this.canvas.width / 2 - 16;
-        const startY = spawnPosition ? spawnPosition.y : this.canvas.height - 80;
+        const centerX = this.canvas.width / 2;
+        const centerY = this.canvas.height / 2;
+
+        const startX = spawnPosition ? spawnPosition.x : centerX - 16;
+        const startY = spawnPosition ? spawnPosition.y : centerY + 50;
 
         this.player = new PlayerController(startX, startY);
         if (spawnPosition) this.player.facing = spawnPosition.facing;
@@ -37,8 +38,8 @@ export class LobbyScene {
         ];
 
         this.cabinets = [
-            { id: 'blackjack', label: 'BLACKJACK', x: 200, y: 100, w: 64, h: 64 },
-            { id: 'slots', label: 'SLOTS', x: 400, y: 100, w: 64, h: 64 },
+            { id: 'blackjack', label: 'BLACKJACK', x: centerX - 100, y: centerY - 50, w: 64, h: 64 },
+            { id: 'slots', label: 'SLOTS', x: centerX + 50, y: centerY - 50, w: 64, h: 64 }
         ];
 
         this.reach = 20;
@@ -58,7 +59,7 @@ export class LobbyScene {
     update(dt) {
         const colliders = [...this.walls, ...this.cabinets];
         this.player.update(dt, this.keys, colliders);
-        
+
         const p = this.player.getRect();
         this.activeCabinet = null;
 
@@ -87,17 +88,17 @@ export class LobbyScene {
     }
 
     render(ctx) {
-        ctx.fillStyle = '#2f3640';
+        ctx.fillStyle = '#34495e';
         ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        ctx.fillStyle = '#353b48';
+        ctx.fillStyle = '#95a5a6';
         for (let w of this.walls) ctx.fillRect(w.x, w.y, w.w, w.h);
 
         for (let cab of this.cabinets) {
-            ctx.fillStyle = '#fbc531';
+            ctx.fillStyle = '#f1c40f'; // Bright yellow
             ctx.fillRect(cab.x, cab.y, cab.w, cab.h);
 
-            ctx.fillStyle = '#fff'
+            ctx.fillStyle = '#fff';
             ctx.font = '14px monospace';
             ctx.fillText(cab.label, cab.x, cab.y - 10);
         }
@@ -105,9 +106,9 @@ export class LobbyScene {
         this.player.render(ctx);
 
         if (this.activeCabinet) {
-            ctx.fillStyle = '#05c46b';
-            ctx.font = '16px monospace';
-            ctx.fillText("press E to play", this.activeCabinet.x, this.activeCabinet.y - 30);
+            ctx.fillStyle = '#2ecc71'; // Bright green text
+            ctx.font = '18px monospace';
+            ctx.fillText("Press E to play", this.activeCabinet.x - 20, this.activeCabinet.y - 30);
         }
     }
 

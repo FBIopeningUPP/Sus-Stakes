@@ -19,7 +19,7 @@ resizeCanvas();
 const session = new CasinoSession();
 session.load();
 
-const sceneManager = new SceneManager(ctx, session);
+const sceneManager = new SceneManager(canvas, ctx);
 const mouse = { x: 0, y: 0 };
 
 canvas.addEventListener('mousemove', (e) => {
@@ -33,7 +33,7 @@ canvas.addEventListener('mousemove', (e) => {
 });
 
 canvas.addEventListener('click', (e) => {
-    if (sceneManager.currentScene && sceneManger.currentScene.handleClick){
+    if (sceneManager.currentScene && sceneManager.currentScene.handleClick){
         sceneManager.currentScene.handleClick(mouse.x, mouse.y);
     }
 });
@@ -63,10 +63,10 @@ function gameLoop(currentTime){
             sceneManager.update(timeStep);
             accumulatedTime -= timeStep;
         }
-        sceneManager.render();
-    }   catch (error) {
-        alert("GAME CRASHED!\nError: " + err.message + "\n\nStack:\n" + err.stack);
-        throw err;
+        sceneManager.render(ctx);
+    }   catch (e) {
+        alert("CRASH: " + (e.stack || e.message || e));
+        throw e;
     }
 }
 

@@ -32,3 +32,8 @@ rewriting lobby scene so there is no bug
 re wrote the whole thing still have bugs will work on main.js
 
 the error are coming up so i used ai to debug it and i found out that i need to re write player controller js
+
+so real progress is done 
+![alt text](screenshots\main-screen.png)
+![alt text](screenshots\image.png)
+i have made the game select page and everything

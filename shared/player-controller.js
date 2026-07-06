@@ -4,8 +4,8 @@ export class PlayerController {
         this.y = y;
         this.w = 32;
         this.h = 32;
-        this.speed = 0.2;
-        this.facing  = 'down';
+        this.speed = 0.2; // pixels per ms
+        this.facing = 'down';
     }
 
     getRect() {
@@ -32,10 +32,10 @@ export class PlayerController {
         else if (dy > 0) this.facing = 'down';
 
         this.x += dx;
-        if (this.checkCollisions(colliders)) this.x -= dx;
+        if (this.checkCollisions(colliders)) this.x -= dx; // 1st check
 
         this.y += dy;
-        if (this.checkCollisions(colliders)) this.y -= dy;
+        if (this.checkCollisions(colliders)) this.y -= dy; // 2nd check!
     }
 
     checkCollisions(colliders) {
@@ -53,12 +53,13 @@ export class PlayerController {
         ctx.fillStyle = '#ff4757';
         ctx.fillRect(this.x, this.y, this.w, this.h);
 
-        ctx.fillStyle = 'black';
+        ctx.fillStyle = '#000';
         let ex = this.x + 14, ey = this.y + 14;
         if (this.facing === 'left') ex = this.x + 4;
         if (this.facing === 'right') ex = this.x + 24;
         if (this.facing === 'up') ey = this.y + 4;
         if (this.facing === 'down') ey = this.y + 24;
+
         ctx.fillRect(ex, ey, 4, 4);
     }
 }
