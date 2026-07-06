@@ -25,3 +25,6 @@ game interface js just there to know what block is doing what
 
 player controller. js had issues where check collsion was not a function and there was mistake fixed it
 and now the work flow is working it was just the issue with a spelling mistake with collider where s was missing
+
+now when i click the main box the screen goes black maybe worflow issue adding a console log so i can know what is happening
+rewriting lobby scene so there is no bug
