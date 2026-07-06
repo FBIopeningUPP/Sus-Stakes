@@ -22,6 +22,13 @@ export class CasinoSession {
         }));
     }
 
+    hardReset() {
+        this.bankroll = 1000;
+        this.debt = 0;
+        this.transactions = [];
+        this.save();
+    }
+
     addTransaction(game, wager, payout) {
         let netProfit = payout - wager;
 

@@ -15,9 +15,11 @@ export class LobbyScene {
             if (e.repeat) return;
             this.keys[e.key] = true;
 
-            if(e.key.toLowerCase() === 'r') {
-                this.session.bankroll = 3000;
-                this.session.save();
+            if (e.key.toLowerCase() === 'r') {
+                if (confirm("Are you sure you want to completely wipe your save? This resets bankroll, clears your debt, and deletes your history."))
+{
+                    this.session.hardReset();
+                }
             }
         };
         this.onKeyUp = (e) => {

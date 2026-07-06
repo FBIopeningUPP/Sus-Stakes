@@ -94,8 +94,12 @@ export class SlotsGame {
     }
 
     drawButton(ctx, x, y, w, h, text, color) {
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetY = 5;
         ctx.fillStyle = color;
         ctx.fillRect(x, y, w, h);
+        ctx.shadowColor = 'transparent';
         ctx.fillStyle = '#fff';
         ctx.font = '16px monospace';
         ctx.textAlign = 'center';
@@ -127,7 +131,10 @@ export class SlotsGame {
         const W = this.sm.canvas.width;
         const H = this.sm.canvas.height;
 
-        ctx.fillStyle = '#2c3e50';
+        const grad = ctx.createRadialGradient(W/2, H/2, 50, W/2, H/2, W);
+        grad.addColorStop(0, '#2c3e50');
+        grad.addColorStop(1, '#111820');
+        ctx.fillStyle = grad;
         ctx.fillRect(0, 0, W, H);
         ctx.fillStyle = '#fff';
         ctx.font = '20px monospace';
@@ -177,8 +184,11 @@ export class SlotsGame {
         ctx.font = '24px monospace';
         if (this.state === 'RESULT') {
             if (this.lastWin > 0) {
+                ctx.shadowColor = '#2ecc71';
+                ctx.shadowBlur = 15;
                 ctx.fillStyle = '#2ecc71';
                 ctx.fillText(`WINNER! +$${this.lastWin}!`, W/2, my - 30);
+                ctx.shadowColor = 'transparent'; 
             } else {
                 ctx.fillStyle = '#e74c3c';
                 ctx.fillText(`NO WIN`, W/2, my - 30);

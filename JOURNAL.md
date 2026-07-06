@@ -59,3 +59,8 @@ will be adding a loan thing like lona shark where u can get loan when u are out 
 added a loan shark which gives money
 
 now i will add a feature to reset my game where u can hard reset everything
+
+reset feature is added
+
+the ui will be added with more depth added shadows and neon things
+
