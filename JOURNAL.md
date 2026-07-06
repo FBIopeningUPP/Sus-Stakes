@@ -64,3 +64,7 @@ reset feature is added
 
 the ui will be added with more depth added shadows and neon things
 
+will be adding a traanscation recorder that can basically a ledger
+
+![alt text](screenshots\some.png)
+![alt text](screenshots\ledger.png)

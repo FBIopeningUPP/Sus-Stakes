@@ -2,6 +2,7 @@ import { PlayerController } from '../shared/player-controller.js';
 import { StubGame } from '../games/stub-games.js';
 import { BlackjackGame } from '../games/blackjack.js';
 import { SlotsGame } from '../games/slots.js';
+import { LedgerTerminal } from '../games/ledger.js';
 
 export class LobbyScene {
     constructor(sceneManager, session, spawnPosition) {
@@ -49,7 +50,8 @@ export class LobbyScene {
         this.cabinets = [
             { id: 'blackjack', label: 'BLACKJACK', x: centerX - 100, y: centerY - 50, w: 64, h: 64 },
             { id: 'slots', label: 'SLOTS', x: centerX + 50, y: centerY - 50, w: 64, h: 64 },
-            { id: 'shark', label: 'LOAN SHARK', x: 60 , y: 60, w: 64, h: 40 }
+            { id: 'shark', label: 'LOAN SHARK', x: 60 , y: 60, w: 64, h: 40 },
+            { id: 'ledger', label: 'LEDGER', x: centerX - 32, y: 60, w: 64, h: 40 }
         ];
 
         this.reach = 20;
@@ -87,28 +89,22 @@ export class LobbyScene {
             this.keys['e'] = false;
             this.keys['E'] = false;
 
-            const returnPos = {
-                x: this.player.x,
-                y: this.player.y,
-                facing: this.player.facing
-            };
+            const returnPos = { x: this.player.x, y: this.player.y, facing: this.player.facing };
 
             if (this.activeCabinet.id === 'blackjack') {
                 this.sm.changeScene(new BlackjackGame(this.sm, this.session, this.activeCabinet.id, returnPos));
             } else if (this.activeCabinet.id === 'slots') {
                 this.sm.changeScene(new SlotsGame(this.sm, this.session, this.activeCabinet.id, returnPos));
-            } else {
-                this.sm.changeScene(new StubGame(this.sm, this.session, this.activeCabinet.id, returnPos));
-                }
-            if (this.activeCabinet.id === 'shark') {
+            } else if (this.activeCabinet.id === 'ledger') {
+                this.sm.changeScene(new LedgerTerminal(this.sm, this.session, this.activeCabinet.id, returnPos));
+            } else if (this.activeCabinet.id === 'shark') {
                 if (this.session.bankroll < 50) {
-                    this.session.takeLoan();
                     alert("SHARK: BOI HERE's YO 1000 dolla dolla, now you owe me 1500 dolla dolla, i will be grabbing all yo 20% form yo win");
                 } else {
                     alert("SHARK: You still got chips. Come back when you're actually broke, kid.");
                 }
-            } else if (this.activeCabinet.id === 'blackjack') {
-                this.sm.changeScene(new BlackjackGame(this.sm, this.session, this.activeCabinet.id, returnPos));
+            } else {
+                this.sm.changeScene(new StubGame(this.sm, this.session, this.activeCabinet.id, returnPos));
             }
         }
     }
@@ -131,7 +127,9 @@ export class LobbyScene {
         }
 
         for (let cab of this.cabinets) {
-            ctx.fillStyle = cab.id === 'shark' ? '#7f8c8d' : '#f1c40f';
+            if (cab.id === 'shark') ctx.fillStyle = '#7f8c8d';
+            else if (cab.id === 'ledger') ctx.fillStyle = '#2ecc71';
+            else ctx.fillStyle = '#f1c40f';
             ctx.fillRect(cab.x, cab.y, cab.w, cab.h);
 
             ctx.fillStyle = '#fff';
