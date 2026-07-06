@@ -75,4 +75,4 @@ i will refine the ledger more, re writing ledger with better ammount and everyth
 
 downloaded images from random sources and random gambling websites and games so i can use them in my project 😁
 
-changed the image from 
+changed the images with removed background made stuff bigger and major stuff is done
