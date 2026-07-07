@@ -140,14 +140,14 @@ export class RouletteGame {
     }
 
     handleClick(x, y) {
-        if (this.state !== 'BETTING') return;
-
         if (this.state === 'RESULT') {
             this.state = 'BETTING';
             this.bets = [];
             this.message = 'Place your bets!';
             return;
         }
+
+        if (this.state !== 'BETTING') return;
 
         const W = this.sm.canvas.width;
         const H = this.sm.canvas.height;

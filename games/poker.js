@@ -106,7 +106,7 @@ export class PokerGame {
         let straightFlush = flushCards ? getStraight(flushCards) : null;
         if (straightFlush) return { score: 800 + straightFlush, name: "Straight Flush" };
 
-        let counts = Object.entries(ranks).map(([r, c]) => ({ value: parseInt(r), c }));
+        let counts = Object.entries(ranks).map(([r, c]) => ({ value: parseInt(r), count: c }));
         counts.sort((a,b) => b.count - a.count || b.value - a.value);
 
         if (counts[0].count === 4) return { score: 700 + counts[0].value, name: "Four of a Kind" };
