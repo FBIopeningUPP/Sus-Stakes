@@ -135,6 +135,9 @@ export class PokerGame {
 
             this.state = 'PREFLOP';
             this.message = "Your move. Bet $50 or fold.";
+
+            this.sm.audio.playCoin();
+            setTimeout(() => this.sm.audio.playTick(), 200);
     }
 
     nextPhase() {
@@ -142,6 +145,7 @@ export class PokerGame {
 
         this.session.bankroll -= 50;
         this.pot += 50;
+        this.sm.audio.playCoin();
 
         let botEval = this.evaluateHand(this.botHand);
         let foldChance = 0;
@@ -159,6 +163,7 @@ export class PokerGame {
         }
 
         this.pot += 50;
+        setTimeout(() => this.sm.audio.playTick(), 300);
 
         if (this.state === 'PREFLOP') {
             this.communityCards.push(this.drawCard(), this.drawCard(), this.drawCard());
@@ -185,18 +190,22 @@ export class PokerGame {
             this.sm.shake(500, 10);
             this.sm.spawnConfetti(this.sm.canvas.width/2, this.sm.canvas.height/2, 100);
             this.sm.spawnFloatingText(`+$${this.pot}!`, this.sm.canvas.width/2, this.sm.canvas.height/2, '#2ecc71');
+            this.sm.audio.playWin();
         } else if (bEval.score > pEval.score) {
             this.message = `Bot WINS with ${bEval.name}...`;
             this.sm.shake(300, 5);
+            this.sm.audio.playLose();
         } else {
             this.message = `CHOP! It's a TIE (${pEval.name})`;
             this.session.bankroll += this.pot / 2;
+            this.sm.audio.playCoin();
         }
     }
 
     fold() {
         this.state = 'SHOWDOWN';
         this.message = "You fold. Bot wins the pot.";
+        this.sm.audio.playLose();
     }
 
     update(dt) {}

@@ -1,6 +1,6 @@
 export class AudioManager {
     constructor() {
-        const AudioContext = window.AudioContext || window.webKitAudioContext;
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
         this.ctx = new AudioContext();
 
         this.masterGain = this.ctx.createGain();

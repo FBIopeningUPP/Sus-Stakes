@@ -1,3 +1,5 @@
+import { AudioManager } from './audio-manager.js';
+
 export class SceneManager {
     constructor(canvas, ctx) {
         this.canvas = canvas;
@@ -15,6 +17,8 @@ export class SceneManager {
         this.shakeIntensity = 0;
         this.particles = [];
         this.floatingTexts = [];
+
+        this.audio = new AudioManager();
     }
 
     shake(durationMs, intensity) {
