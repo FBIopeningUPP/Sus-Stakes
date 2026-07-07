@@ -91,3 +91,5 @@ https://cazwolf.itch.io/pixel-slot-machine?download
 will update the slots.js game to fix the new asset
 
 well the thing is not working need to fix it
+
+made my slot things limited to 4 things and i will rewrite the whole render(ctx)so i can fix the font size and remove some stuff and keep it subble and good

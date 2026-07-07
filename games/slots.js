@@ -7,15 +7,12 @@ export class SlotsGame {
         this.gameId = gameId;
         this.returnPosition = returnPosition;
 
-        this.symbols = ['CHERRY', 'LEMON', 'ORANGE', 'PLUM', 'BELL', 'BAR', 'SEVEN'];
+        this.symbols = ['CHERRY', 'BELL', 'BAR', 'SEVEN'];
         this.payouts = {
             'CHERRY': 2,
-            'LEMON': 3,
-            'ORANGE': 5,
-            'GRAPE': 10,
-            'BELL': 20,
-            'DIAMOND': 50,
-            'SEVEN': 100
+            'BELL': 5,
+            'BAR': 10,
+            'SEVEN': 50
         };
 
         this.state = 'IDLE';
@@ -34,14 +31,30 @@ export class SlotsGame {
             }
         };
 
-        this.layerReels = new Image();
-        this.layerReels.src = 'assets/slots/slot-machine5.png';
-        this.layerReels = new Image();
-        this.layerReels.src = 'assets/slots/slot-machine4.png';
-        this.layerReels = new Image();
-        this.layerReels.src = 'assets/slots/slot-machine2.png';
-        this.layerReels = new Image();
-        this.layerReels.src = 'assets/slots/slot-machine3.png';
+        this.symbolImages = {};
+        const imageMap = {
+            'BAR': 'slot-symbol1',
+            'SEVEN': 'slot-symbol2',
+            'CHERRY': 'slot-symbol3',
+            'BELL': 'slot-symbol4'
+        };
+
+        for (let sym of this.symbols) {
+            if (imageMap[sym]) {
+                let img = new Image();
+                img.src = `assets/slots/${imageMap[sym]}.png`;
+                this.symbolImages[sym] = img;
+            }
+        }
+
+        this.machineBase = new Image();
+        this.machineBase.src = 'assets/slots/slot-machine1.png';
+        
+        this.leverMid = new Image();
+        this.leverMid.src = 'assets/slots/slot-machine2.png';
+
+        this.leverDown = new Image();
+        this.leverDown.src = 'assets/slots/slot-machine3.png';
     }
 
     init() {
@@ -136,6 +149,16 @@ export class SlotsGame {
         }
     }
 
+    drawSymbol(ctx, sym, x, y) {
+        let img = this.symbolImages[sym];
+        if (img && img.complete && img.naturalWidth > 0) {
+            ctx.drawImage(img, x - 32, y - 32, 64, 64); 
+        } else {
+            ctx.font = '24px Kenney';
+            ctx.fillText(sym, x, y + 8);
+        }
+    }
+
     render(ctx) {
         const W = this.sm.canvas.width;
         const H = this.sm.canvas.height;
@@ -147,32 +170,29 @@ export class SlotsGame {
         ctx.fillRect(0, 0, W, H);
         ctx.fillStyle = '#fff';
         ctx.font = '20px Kenney';
-        ctx.textAlign = 'left';
+        ctx.textAlign = 'center';
         ctx.fillText(`Bankroll: $${this.session.bankroll}`, 20, 30);
 
         const mx = W/2 - 200;
         const my = H/2 - 175;
 
         const drawX = mx - 100;
-        const drawY = my - 150;
+        const drawY = my - 100;
         const drawW = 600;
         const drawH = 500;
 
-        if (this.layerReels.complete && this.layerReels.naturalWidth > 0) {
-            ctx.drawImage(this.layerReels, drawX, drawY, drawW, drawH);
+        if (this.machineBase && this.machineBase.complete && this.machineBase.naturalWidth > 0) {
+            ctx.drawImage(this.machineBase, drawX, drawY, drawW, drawH);
         }
 
-        const rWidth = 100;
-        const rHeight = 150;
-        const ry = my + 50;
+        const symbolStartX = mx + 105;
+        const symbolSpacing = 100;
+        const symbolY = my + 170;
 
         ctx.textAlign = 'center';
-        
-        for (let i = 0; i < 3; i++) {
-            const cx = mx + 30 + (i * 120);
 
-            ctx.fillStyle = '#fff';
-            ctx.fillRect(cx, ry, rWidth, rHeight);
+        for (let i = 0; i < 3; i++) {
+            const cx = symbolStartX + (i * symbolSpacing);
 
             ctx.fillStyle = '#000';
             ctx.font = '18px Kenney';
@@ -184,39 +204,39 @@ export class SlotsGame {
                     displaySym = this.getRandomSymbol();
 
                     ctx.fillStyle = '#ccc';
-                    ctx.fillText(this.getRandomSymbol(), cx + rWidth/2, ry + 30);
-                    ctx.fillText(this.getRandomSymbol(), cx + rWidth/2, ry + 130);
+                    this.drawSymbol(ctx, this.getRandomSymbol(), cx, symbolY - 40);
+                    this.drawSymbol(ctx, this.getRandomSymbol(), cx, symbolY + 60);
                     ctx.fillStyle = '#000';
                 }
             }
 
-            ctx.fillText(displaySym, cx + rWidth/2, ry + rHeight/2 + 6);
-
-            if (this.layerCover.complete && this.layerCover.naturalWidth > 0) {
-                ctx.drawImage(this.layerCover, drawX, drawY, drawW, drawH);
-            }
-
-            let lever = (this.state === 'SPINNING') ? this.leverDown : this.leverUp;
-            if (lever.complete && lever.naturalWidth > 0) {
-                ctx.drawImage(lever, drawX, drawY, drawW, drawH);
-            }
+            this.drawSymbol(ctx, displaySym, cx, symbolY);
         }
 
-        ctx.fillStyle = '#fff';
-        ctx.font = '24px Kenney';
+        let lever = (this.state === 'SPINNING') ? this.leverDown : this.leverMid;
+        if (lever && lever.complete && lever.naturalWidth > 0) {
+            ctx.drawImage(lever, drawX, drawY, drawW, drawH);
+        }
+
+        const textY = my - 130;
+
         if (this.state === 'RESULT') {
             if (this.lastWin > 0) {
+                ctx.font = '60px Kenney'; 
                 ctx.shadowColor = '#2ecc71';
                 ctx.shadowBlur = 15;
                 ctx.fillStyle = '#2ecc71';
-                ctx.fillText(`WINNER! +$${this.lastWin}!`, W/2, my - 30);
-                ctx.shadowColor = 'transparent'; 
+                ctx.fillText(`WINNER! +$${this.lastWin}!`, W/2, textY);
+                ctx.shadowColor = 'transparent';
             } else {
+                ctx.font = '60px Kenney'; 
                 ctx.fillStyle = '#e74c3c';
-                ctx.fillText(`NO WIN`, W/2, my - 30);
+                ctx.fillText(`NO WIN`, W/2, textY);
             }
         } else {
-            ctx.fillText(`MATCH 3 TO WIN!`, W/2, my - 30);
+            ctx.font = '50px Kenney'; 
+            ctx.fillStyle = '#f1c40f'; 
+            ctx.fillText(`MATCH 3 TO WIN`, W/2, textY);
         }
 
         if (this.state === 'IDLE' || this.state === 'RESULT') {
