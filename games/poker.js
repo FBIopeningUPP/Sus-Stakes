@@ -76,7 +76,7 @@ export class PokerGame {
     evaluateHand(holeCards) {
         if (this.communityCards.length === 0) return { score: 0, name: "High Card" };
 
-        let allCards = [...holeCards, ...this.communityCards];
+        let all = [...holeCards, ...this.communityCards];
         all.sort((a,b) => b.value - a.value);
 
         let suits = {};
@@ -107,7 +107,7 @@ export class PokerGame {
         let straightFlush = flushCards ? getStraight(flushCards) : null;
         if (straightFlush) return { score: 800 + straightFlush, name: "Straight Flush" };
 
-        let counts = Object.entries(ranks).map(([r, c]) => ({ value: parseInt(value), count }));
+        let counts = Object.entries(ranks).map(([r, c]) => ({ value: parseInt(r), count }));
         counts.sort((a,b) => b.count - a.count || b.value - a.value);
 
         if (counts[0].count === 4) return { score: 700 + counts[0].value, name: "Four of a Kind" };
@@ -124,5 +124,165 @@ export class PokerGame {
         return { score: 0, name: "High Card" };
     }
 
-    
+    startGame() {
+        if (this.session.bankroll < 50) return;
+            this.session.bankroll -= 50;
+            this.pot = 100;
+
+            this.createDeck();
+            this.playerHand = [this.drawCard(), this.drawCard()];
+            this.botHand = [this.drawCard(), this.drawCard()];
+            this.communityCards = [];
+
+            this.state = 'PREFLOP';
+            this.message = "Your move. Bet $50 or fold.";
+    }
+
+    nextPhase() {
+        if (this.session.bankroll < 50) return;
+
+        this.session.bankroll -= 50;
+        this.pot += 50;
+
+        let botEval = this.evaluateHand(this.botHand);
+        let foldChance = 0;
+
+        if (this.state === 'PREFLOP') foldChance = 0.05;
+        else if (this.state === 'FLOP') foldChance = botEval.score < 100 ? 0.4 : 0;
+        else if (this.state === 'TURN' || this.state === 'RIVER') foldChance = botEval.score < 100 ? 0.6 : 0;
+
+        if (Math.random() < foldChance) {
+            this.state = 'SHOWDOWN';
+            this.message = "Bot folds. You win the pot!";
+            this.session.bankroll += this.pot;
+            this.sm.spawnFloatingText(`+$${this.pot}!`, this.sm.canvas.width/2, this.sm.canvas.height/2, '#2ecc71');
+            return;
+        }
+
+        this.pot += 50;
+
+        if (this.state === 'PREFLOP') {
+            this.communityCards.push(this.drawCard(), this.drawCard(), this.drawCard());
+            this.state = 'FLOP';
+        } else if (this.state === 'FLOP') {
+            this.communityCards.push(this.drawCard());
+            this.state = 'TURN';
+        } else if (this.state === 'TURN') {
+            this.communityCards.push(this.drawCard());
+            this.state = 'RIVER';
+        } else if (this.state === 'RIVER') {
+            this.resolveShowdown();
+        }
+    }
+
+    resolveShowdown() {
+        this.state = 'SHOWDOWN';
+        let pEval = this.evaluateHand(this.playerHand);
+        let bEval = this.evaluateHand(this.botHand);
+
+        if (pEval.score > bEval.score) {
+            this.message = `You win with ${pEval.name}!`;
+            this.session.bankroll += this.pot;
+            this.sm.shake(500, 10);
+            this.sm.spawnConfetti(this.sm.canvas.width/2, this.sm.canvas.height/2, 100);
+            this.sm.spawnFloatingText(`+$${this.pot}!`, this.sm.canvas.width/2, this.sm.canvas.height/2, '#2ecc71');
+        } else if (bEval.score > pEval.score) {
+            this.message = `Bot WINS with ${bEval.name}...`;
+            this.sm.shake(300, 5);
+        } else {
+            this.message = `CHOP! It's a TIE (${pEval.name})`;
+            this.session.bankroll += this.pot / 2;
+        }
+    }
+
+    fold() {
+        this.state = 'SHOWDOWN';
+        this.message = "You fold. Bot wins the pot.";
+    }
+
+    update(dt) {}
+
+    drawCardGraphic(ctx, card, x, y) {
+        if (!card) return;
+        let img = this.cardImages[`${card.suit}_${card.rankStr}`];
+        if (img && img.complete) {
+            ctx.drawImage(img, x, y, 80, 120);
+        }
+    }
+
+    drawButton(ctx, x, y, w, h, text, color) {
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, w, h);
+        ctx.fillStyle = '#fff';
+        ctx.font = '20px Kenney';
+        ctx.textAlign = 'center';
+        ctx.fillText(text, x + w/2, y + h/2 + 6);
+    }
+
+    handleClick(x, y) {
+        if (this.sm.isTransitioning) return;
+        const W = this.sm.canvas.width;
+        const H = this.sm.canvas.height;
+        const hit = (bx, by, bw, bh) => x >= bx && x <= bx + bw && y >= by && y <= by + bh;
+
+        if (this.state === 'IDLE' || this.state === 'SHOWDOWN') {
+             if (hit(W/2 - 50, H - 100, 100, 40)) this.startGame();
+        } else {
+            if (hit(W/2 + 20, H - 100, 100, 40)) this.nextPhase();
+            if (hit(W/2 - 120, H - 100, 100, 40)) this.fold();
+        }
+    }
+
+    render(ctx) {
+        const W = this.sm.canvas.width;
+        const H = this.sm.canvas.height;
+
+        ctx.fillStyle = '#27ae60';
+        ctx.fillRect(0, 0, W, H);
+
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.ellipse(W/2, H/2 + 50,W/2 - 100,H/2 - 100, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#fff';
+        ctx.font = '20px Kenney';
+        ctx.textAlign = 'left';
+        ctx.fillText(`Bankroll: $${this.session.bankroll}`, 20, 30);
+        ctx.fillText(`Pot: $${this.pot}`, W - 150, 30);
+
+        ctx.textAlign = 'center';
+        ctx.font = '24px Kenney';
+        ctx.fillStyle = '#fff';
+        ctx.fillText(this.message || "Welcome to Texas Hold'em!", W/2, 80);
+
+        if (this.state === 'IDLE') {
+            this.drawButton(ctx, W/2 - 50, H - 100, 100, 40, 'DEAL $50', '#e67e22');
+            return;
+        }
+
+        for (let i = 0; i < this.communityCards.length; i++) {
+            this.drawCardGraphic(ctx, this.communityCards[i], W/2 - 190 + (i * 80), H/2 - 48);
+        }
+
+        this.drawCardGraphic(ctx, this.playerHand[0], W/2 -80, H - 220);
+        this.drawCardGraphic(ctx, this.playerHand[1], W/2 + 10, H - 220);
+
+        if (this.state === 'SHOWDOWN' && !this.message.includes('FOLDS')) {
+            this.drawCardGraphic(ctx, this.botHand[0], W/2 -80, 120);
+            this.drawCardGraphic(ctx, this.botHand[1], W/2 + 10, 120); 
+        } else {
+            if (this.cardBack && this.cardBack.complete) {
+                ctx.drawImage(this.cardBack, W/2 - 80, 120, 71, 96);
+                ctx.drawImage(this.cardBack, W/2 + 10, 120, 71, 96);
+            }
+        }
+
+        if (this.state === 'SHOWDOWN'){
+            this.drawButton(ctx, W/2 - 50, H - 100, 100, 40, 'AGAIN', '#e67e22');
+        } else {
+            this.drawButton(ctx, W/2 - 120, H - 100, 100, 40, 'FOLD', '#e74c3c');
+            this.drawButton(ctx, W/2 + 20, H - 100, 100, 40, 'BET $50', '#3498db')
+        }
+    }
 }

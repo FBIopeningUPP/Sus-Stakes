@@ -3,6 +3,7 @@ import { StubGame } from '../games/stub-games.js';
 import { BlackjackGame } from '../games/blackjack.js';
 import { SlotsGame } from '../games/slots.js';
 import { LedgerTerminal } from '../games/ledger.js';
+import { PokerGame } from '../games/poker.js';
 
 export class LobbyScene {
     constructor(sceneManager, session, spawnPosition) {
@@ -51,7 +52,8 @@ export class LobbyScene {
             { id: 'blackjack', label: 'BLACKJACK', x: centerX - 120, y: centerY - 50, w: 96, h: 96 },
             { id: 'slots', label: 'SLOTS', x: centerX + 50, y: centerY - 50, w: 96, h: 96 },
             { id: 'shark', label: 'LOAN SHARK', x: 60 , y: 60, w: 96, h: 96 },
-            { id: 'ledger', label: 'LEDGER', x: centerX - 32, y: 60, w: 96, h: 96 }
+            { id: 'ledger', label: 'LEDGER', x: centerX - 32, y: 60, w: 96, h: 96 },
+            { id: 'poker', label: 'POKER', x: centerX + 50, y: centerY + 100, w: 96, h: 96 }
         ];
 
         this.images = {};
