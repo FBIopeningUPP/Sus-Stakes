@@ -48,12 +48,13 @@ export class LobbyScene {
             { x: w - thick, y: 0, w: thick, h: h }
         ];
 
+        const spacing = w / 5;
         this.cabinets = [
-            { id: 'blackjack', label: 'BLACKJACK', x: centerX - 120, y: centerY - 50, w: 96, h: 96 },
-            { id: 'slots', label: 'SLOTS', x: centerX + 50, y: centerY - 50, w: 96, h: 96 },
-            { id: 'shark', label: 'LOAN SHARK', x: 60 , y: 60, w: 96, h: 96 },
-            { id: 'ledger', label: 'LEDGER', x: centerX - 32, y: 60, w: 96, h: 96 },
-            { id: 'poker', label: 'POKER', x: centerX + 50, y: centerY + 100, w: 96, h: 96 }
+            { id: 'blackjack', label: 'BLACKJACK', x: spacing * 1 - 48, y: 80, w: 96, h: 96 },
+            { id: 'slots', label: 'SLOTS', x: spacing * 2 - 48, y: 80, w: 96, h: 96 },
+            { id: 'poker', label: 'POKER', x: spacing * 3 - 48, y: 80, w: 96, h: 96 },
+            { id: 'ledger', label: 'LEDGER', x: spacing * 4 - 48, y: 80, w: 96, h: 96 },
+            { id: 'shark', label: 'LOAN SHARK', x: w - 150, y: h - 180, w: 96, h: 96 }
         ];
 
         this.images = {};
@@ -162,6 +163,7 @@ export class LobbyScene {
 
             ctx.fillText("Press E to interact", this.activeCabinet.x - 20, this.activeCabinet.y - 30);
         }
+        this.sm.drawHUD(ctx, this.session);
     }
     handleClick(x, y) {}
 }

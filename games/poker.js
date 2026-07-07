@@ -233,55 +233,56 @@ export class PokerGame {
     }
 
     render(ctx) {
-        const W = this.sm.canvas.width;
-        const H = this.sm.canvas.height;
+            const W = this.sm.canvas.width;
+            const H = this.sm.canvas.height;
 
-        ctx.fillStyle = '#27ae60';
-        ctx.fillRect(0, 0, W, H);
+            ctx.fillStyle = '#27ae60';
+            ctx.fillRect(0, 0, W, H);
 
-        ctx.fillStyle = '#fff';
-        ctx.beginPath();
-        ctx.ellipse(W/2, H/2 + 50,W/2 - 100,H/2 - 100, 0, 0, Math.PI * 2);
-        ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.ellipse(W/2, H/2 + 50,W/2 - 100,H/2 - 100, 0, 0, Math.PI * 2);
+            ctx.fill();
 
-        ctx.fillStyle = '#fff';
-        ctx.font = '20px Kenney';
-        ctx.textAlign = 'left';
-        ctx.fillText(`Bankroll: $${this.session.bankroll}`, 20, 30);
-        ctx.fillText(`Pot: $${this.pot}`, W - 150, 30);
+            // Draw Pot beautifully in the center of the table
+            ctx.fillStyle = '#f1c40f';
+            ctx.font = '24px Kenney';
+            ctx.textAlign = 'center';
+            ctx.fillText(`Pot: $${this.pot}`, W/2, H/2 - 100);
 
-        ctx.textAlign = 'center';
-        ctx.font = '24px Kenney';
-        ctx.fillStyle = '#fff';
-        ctx.fillText(this.message || "Welcome to Texas Hold'em!", W/2, 80);
+            ctx.font = '24px Kenney';
+            ctx.fillStyle = '#fff';
+            ctx.fillText(this.message || "Welcome to Texas Hold'em!", W/2, 100);
 
-        if (this.state === 'IDLE') {
-            this.drawButton(ctx, W/2 - 50, H - 100, 100, 40, 'DEAL $50', '#e67e22');
-            return;
-        }
+            if (this.state === 'IDLE') {
+                this.sm.drawButton(ctx, W/2 - 50, H - 100, 100, 40, 'DEAL $50', '#e67e22');
+            } else {
+                for (let i = 0; i < this.communityCards.length; i++) {
+                    this.drawCardGraphic(ctx, this.communityCards[i], W/2 - 190 + (i * 80), H/2 - 48);
+                }
 
-        for (let i = 0; i < this.communityCards.length; i++) {
-            this.drawCardGraphic(ctx, this.communityCards[i], W/2 - 190 + (i * 80), H/2 - 48);
-        }
+                this.drawCardGraphic(ctx, this.playerHand[0], W/2 -80, H - 220);
+                this.drawCardGraphic(ctx, this.playerHand[1], W/2 + 10, H - 220);
 
-        this.drawCardGraphic(ctx, this.playerHand[0], W/2 -80, H - 220);
-        this.drawCardGraphic(ctx, this.playerHand[1], W/2 + 10, H - 220);
+                if (this.state === 'SHOWDOWN' && !this.message.includes('FOLDS')) {
+                    this.drawCardGraphic(ctx, this.botHand[0], W/2 -80, 120);
+                    this.drawCardGraphic(ctx, this.botHand[1], W/2 + 10, 120);
+                } else {
+                    if (this.cardBack && this.cardBack.complete) {
+                        ctx.drawImage(this.cardBack, W/2 - 80, 120, 71, 96);
+                        ctx.drawImage(this.cardBack, W/2 + 10, 120, 71, 96);
+                    }
+                }
 
-        if (this.state === 'SHOWDOWN' && !this.message.includes('FOLDS')) {
-            this.drawCardGraphic(ctx, this.botHand[0], W/2 -80, 120);
-            this.drawCardGraphic(ctx, this.botHand[1], W/2 + 10, 120); 
-        } else {
-            if (this.cardBack && this.cardBack.complete) {
-                ctx.drawImage(this.cardBack, W/2 - 80, 120, 71, 96);
-                ctx.drawImage(this.cardBack, W/2 + 10, 120, 71, 96);
+                if (this.state === 'SHOWDOWN'){
+                    this.sm.drawButton(ctx, W/2 - 50, H - 100, 100, 40, 'AGAIN', '#e67e22');
+                } else {
+                    this.sm.drawButton(ctx, W/2 - 120, H - 100, 100, 40, 'FOLD', '#e74c3c');
+                    this.sm.drawButton(ctx, W/2 + 20, H - 100, 100, 40, 'BET $50', '#3498db')
+                }
             }
-        }
 
-        if (this.state === 'SHOWDOWN'){
-            this.drawButton(ctx, W/2 - 50, H - 100, 100, 40, 'AGAIN', '#e67e22');
-        } else {
-            this.drawButton(ctx, W/2 - 120, H - 100, 100, 40, 'FOLD', '#e74c3c');
-            this.drawButton(ctx, W/2 + 20, H - 100, 100, 40, 'BET $50', '#3498db')
+            // --- GLOBAL HUD ON TOP ---
+            this.sm.drawHUD(ctx, this.session);
         }
-    }
 }

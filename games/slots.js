@@ -164,38 +164,34 @@ export class SlotsGame {
     }
 
     render(ctx) {
-        const W = this.sm.canvas.width;
-        const H = this.sm.canvas.height;
+            const W = this.sm.canvas.width;
+            const H = this.sm.canvas.height;
 
-        const grad = ctx.createRadialGradient(W/2, H/2, 50, W/2, H/2, W);
-        grad.addColorStop(0, '#2c3e50');
-        grad.addColorStop(1, '#111820');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, W, H);
-        ctx.fillStyle = '#fff';
-        ctx.font = '20px Kenney';
-        ctx.textAlign = 'center';
-        ctx.fillText(`Bankroll: $${this.session.bankroll}`, 20, 30);
+            const grad = ctx.createRadialGradient(W/2, H/2, 50, W/2, H/2, W);
+            grad.addColorStop(0, '#2c3e50');
+            grad.addColorStop(1, '#111820');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
 
-        const mx = W/2 - 200;
-        const my = H/2 - 175;
+            const mx = W/2 - 200;
+            const my = H/2 - 175;
 
-        const drawX = mx - 100;
-        const drawY = my - 100;
-        const drawW = 600;
-        const drawH = 500;
+            const drawX = mx - 100;
+            const drawY = my - 100;
+            const drawW = 600;
+            const drawH = 500;
 
-        if (this.machineBase && this.machineBase.complete && this.machineBase.naturalWidth > 0) {
-            ctx.drawImage(this.machineBase, drawX, drawY, drawW, drawH);
-        }
+            if (this.machineBase && this.machineBase.complete && this.machineBase.naturalWidth > 0) {
+                ctx.drawImage(this.machineBase, drawX, drawY, drawW, drawH);
+            }
 
-        const symbolStartX = mx + 105;
-        const symbolSpacing = 100;
-        const symbolY = my + 170;
+            const symbolStartX = mx + 105;
+            const symbolSpacing = 100;
+            const symbolY = my + 170;
 
-        ctx.textAlign = 'center';
+            ctx.textAlign = 'center';
 
-        for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < 3; i++) {
             const cx = symbolStartX + (i * symbolSpacing);
 
             ctx.fillStyle = '#000';
@@ -206,14 +202,12 @@ export class SlotsGame {
             if (this.state === 'SPINNING') {
                 if (this.spinTime < this.reelStops[i]) {
                     displaySym = this.getRandomSymbol();
-
                     ctx.fillStyle = '#ccc';
                     this.drawSymbol(ctx, this.getRandomSymbol(), cx, symbolY - 40);
                     this.drawSymbol(ctx, this.getRandomSymbol(), cx, symbolY + 60);
                     ctx.fillStyle = '#000';
                 }
             }
-
             this.drawSymbol(ctx, displaySym, cx, symbolY);
         }
 
@@ -226,32 +220,34 @@ export class SlotsGame {
 
         if (this.state === 'RESULT') {
             if (this.lastWin > 0) {
-                ctx.font = '60px Kenney'; 
+                ctx.font = '60px Kenney';
                 ctx.shadowColor = '#2ecc71';
                 ctx.shadowBlur = 15;
                 ctx.fillStyle = '#2ecc71';
                 ctx.fillText(`WINNER! +$${this.lastWin}!`, W/2, textY);
                 ctx.shadowColor = 'transparent';
             } else {
-                ctx.font = '60px Kenney'; 
+                ctx.font = '60px Kenney';
                 ctx.fillStyle = '#e74c3c';
                 ctx.fillText(`NO WIN`, W/2, textY);
             }
         } else {
-            ctx.font = '50px Kenney'; 
-            ctx.fillStyle = '#f1c40f'; 
+            ctx.font = '50px Kenney';
+            ctx.fillStyle = '#f1c40f';
             ctx.fillText(`MATCH 3 TO WIN`, W/2, textY);
         }
 
         if (this.state === 'IDLE' || this.state === 'RESULT') {
-            this.drawButton(ctx, W/2 - 120, H - 100, 40, 40, '-', '#34495e');
+            this.sm.drawButton(ctx, W/2 - 120, H - 100, 40, 40, '-', '#34495e');
             ctx.fillStyle = '#fff';
             ctx.font = '30px Kenney';
             ctx.fillText(`Bet: ${this.currentBet}`, W/2, H - 72);
-            this.drawButton(ctx, W/2 + 80, H - 100, 40, 40, '+', '#34495e');
+            this.sm.drawButton(ctx, W/2 + 80, H - 100, 40, 40, '+', '#34495e');
 
             const canSpin = this.session.bankroll >= this.currentBet;
-            this.drawButton(ctx, W/2 - 50, H - 50, 100, 40, 'SPIN', canSpin ? '#e67e22' : '#7f8c8d');
+            this.sm.drawButton(ctx, W/2 - 50, H - 50, 100, 40, 'SPIN', canSpin ? '#e67e22' : '#7f8c8d');
         }
+
+        this.sm.drawHUD(ctx, this.session);
     }
 }

@@ -96,6 +96,45 @@ export class SceneManager {
         }
     }
 
+    drawButton(ctx, x, y, w, h, text, color) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        ctx.fillRect(x + 4, y + 4, w, h);
+
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, w, h);
+
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(x, y, w, h - 5);
+        
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, w, 5);
+
+        ctx.fillStyle = '#000';
+        ctx.font = '20px Kenney';
+        ctx.textAlign = 'center';
+        ctx.fillText(text, x + w/2, y + h/2 + 6);
+    }
+
+    drawHUD(ctx, session) {
+        const W = (this.canvas && this.canvas.width) || ctx.canvas.width;
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+        ctx.fillRect(0, 0, W, 50);
+        ctx.fillStyle = '#3498db';
+        ctx.fillRect(0, 0, W, 5);
+
+        ctx.textAlign = 'left';
+        ctx.font = '24px Kenney';
+        ctx.fillStyle = '#2ecc71';
+        ctx.fillText(`CASH: $${session.bankroll.toLocaleString()}`, 20, 36);
+
+        if (session.debt > 0) {
+            ctx.textAlign = 'right';
+            ctx.fillStyle = '#e74c3c';
+            ctx.fillText(`DEBT: $${session.debt.toLocaleString()}`, W - 20, 36);
+        }
+    }
+
     render(ctx) {
         const W = (this.canvas && this.canvas.width) || ctx.canvas.width;
         const H = (this.canvas && this.canvas.height) || ctx.canvas.height;
