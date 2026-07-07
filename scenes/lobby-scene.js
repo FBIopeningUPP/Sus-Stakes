@@ -51,15 +51,15 @@ export class LobbyScene {
         ];
 
         this.cabinets = [
-            { id: 'slots', label: 'SLOTS', x: 200, y: 150, w: 96, h: 96 },
+            { id: 'slots', label: 'SLOTS', x: 150, y: 150, w: 96, h: 96 },
             { id: 'blackjack', label: 'BLACKJACK', x: 400, y: 150, w: 96, h: 96 },
-            { id: 'roulette', label: 'ROULETTE', x: 600, y: 150, w: 96, h: 96 },
+            { id: 'roulette', label: 'ROULETTE', x: 650, y: 150, w: 96, h: 96 },
 
-            { id: 'poker', label: 'POKER', x: 300, y: 450, w: 96, h: 96 },
-            { id: 'ledger', label: 'LEDGER', x: 500, y: 450, w: 96, h: 96 },
+            { id: 'poker', label: 'POKER', x: 250, y: 450, w: 96, h: 96 },
+            { id: 'ledger', label: 'LEDGER', x: 550, y: 450, w: 96, h: 96 },
 
-            { id: 'shark', label: 'LOAN SHARK', x: 950, y: 100, w: 96, h: 96 },
-            { id: 'poker', label: 'VIP POKER', x: 950, y: 250, w: 96, h: 96 }
+            { id: 'shark', label: 'LOAN SHARK', x: 1050, y: 80, w: 96, h: 96 },
+            { id: 'poker', label: 'VIP POKER', x: 900, y: 250, w: 96, h: 96 }
         ];
 
         this.npcs = [];
@@ -125,6 +125,7 @@ export class LobbyScene {
             this.isNearBouncer = true;
             if (this.keys['e'] || this.keys['E']) {
                 this.keys['e'] = false;
+                this.keys['E'] = false;
                 if (this.session.bankroll < 25000) {
                     alert("BOUNCER: VIPs only. Come back when you have $25,000, scrub.");
                     this.player.y += 60;
@@ -150,6 +151,7 @@ export class LobbyScene {
 
         if (this.activeCabinet && (this.keys['e'] || this.keys['E'])) {
             this.keys['e'] = false;
+            this.keys['E'] = false;
             const returnPos = { x: this.player.x, y: this.player.y, facing: this.player.facing };
 
             if (this.activeCabinet.id === 'blackjack') {
