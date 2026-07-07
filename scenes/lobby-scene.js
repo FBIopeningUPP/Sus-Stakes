@@ -8,6 +8,8 @@ import { PokerGame } from '../games/poker.js';
 import { Camera } from '../shared/camera.js';
 import { NPC } from '../shared/npc.js';
 
+import { RouletteGame } from '../games/roulette.js';
+
 export class LobbyScene {
     constructor(sceneManager, session, spawnPosition) {
         this.sm = sceneManager;
@@ -55,7 +57,7 @@ export class LobbyScene {
             { id: 'blackjack', label: 'BLACKJACK', x: 600, y: 200, w: 96, h: 96 },
             { id: 'poker', label: 'POKER', x: 750, y: 200, w: 96, h: 96 },
             { id: 'ledger', label: 'LEDGER', x: 900, y: 200, w: 96, h: 96 },
-
+            { id: 'roulette', label: 'ROULETTE', x: 750, y: 200, w: 96, h: 96 },
             { id: 'shark', label: 'LOAN SHARK', x: 300, y: 400, w: 96, h: 96 },
             { id: 'poker', label: 'POKER', x: 450, y: 400, w: 96, h: 96 },
         ];
@@ -158,6 +160,8 @@ export class LobbyScene {
                 this.sm.changeScene(new LedgerTerminal(this.sm, this.session, this.activeCabinet.id, returnPos));
             } else if (this.activeCabinet.id === 'poker') {
                 this.sm.changeScene(new PokerGame(this.sm, this.session, this.activeCabinet.id, returnPos));
+            } else if (this.activeCabinet.id === 'roulette') {
+                this.sm.changeScene(new RouletteGame(this.sm, this.session, this.activeCabinet.id, returnPos));
             } else if (this.activeCabinet.id === 'shark') {
                 if (this.session.bankroll < 50) {
                     alert("SHARK: Take this $1000. Don't make me come looking for it.");

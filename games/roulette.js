@@ -115,7 +115,7 @@ export class RouletteGame {
             if (bet.type === 'ODD' && this.winningNumber !== 0 && this.winningNumber % 2 === 1) { win = true; payoutMult = 2; }
             if (bet.type === '1-18' && this.winningNumber >= 1 && this.winningNumber <= 18) { win = true; payoutMult = 2; }
             if (bet.type === '19-36' && this.winningNumber >= 19 && this.winningNumber <= 36) { win = true; payoutMult = 2; }
-            if (bet.type === 'ZERO' && bet.number === this.winningNumber) { win = true; payoutMult = 36; }
+            if (bet.type === 'ZERO' && this.winningNumber === 0) { win = true; payoutMult = 36; }
             
             if (win) {
                 let amountWon = bet.amount * payoutMult;
@@ -154,13 +154,13 @@ export class RouletteGame {
         const btnY = H - 100;
 
         const buttons = [
-            { type: 'RED', x: 100, y: btnY, width: 100, height: 40 },
-            { type: 'BLACK', x: 220, y: btnY, width: 100, height: 40 },
-            { type: 'EVEN', x: 340, y: btnY, width: 100, height: 40 },
-            { type: 'ODD', x: 460, y: btnY, width: 100, height: 40 },
-            { type: '1-18', x: 580, y: btnY, width: 100, height: 40 },
-            { type: '19-36', x: 700, y: btnY, width: 100, height: 40 },
-            { type: 'ZERO', x: 820, y: btnY, width: 100, height: 40 }
+            { type: 'RED', x: 100, y: btnY, w: 100, h: 40 },
+            { type: 'BLACK', x: 220, y: btnY, w: 100, h: 40 },
+            { type: 'EVEN', x: 340, y: btnY, w: 100, h: 40 },
+            { type: 'ODD', x: 460, y: btnY, w: 100, h: 40 },
+            { type: '1-18', x: 580, y: btnY, w: 100, h: 40 },
+            { type: '19-36', x: 700, y: btnY, w: 100, h: 40 },
+            { type: 'ZERO', x: 820, y: btnY, w: 100, h: 40 }
         ];
 
         for (let b of buttons) {
@@ -191,8 +191,8 @@ export class RouletteGame {
         ctx.translate(centerX, centerY);
         ctx.rotate(this.wheelAngle);
 
-        const slicer = this.wheelNumbers.length;
-        const arc = (Math.PI * 2) / slicer;
+        const slices = this.wheelNumbers.length;
+        const arc = (Math.PI * 2) / slices;
 
         for (let i = 0; i < slices; i++) {
             let num = this.wheelNumbers[i];
@@ -256,10 +256,9 @@ export class RouletteGame {
 
         if (this.state === 'BETTING') {
             this.sm.drawButton(ctx, W - 150, H - 100, 100, 40, 'SPIN', '#f1c40f');
-        } else if {
+        } else if (this.state === 'RESULT') {
             this.sm.drawButton(ctx, W - 150, btnY, 100, 40, 'AGAIN', '#e67e22');
         }
-
         this.sm.drawHUD(ctx, this.session);
     }
 }
