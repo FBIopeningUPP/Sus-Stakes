@@ -325,19 +325,6 @@ export class BlackjackGame {
         }
     }
 
-    drawButton(ctx, x, y, w, h, text, color) {
-        ctx.fillStyle = color;
-        if (ctx.roundRect) {
-            ctx.beginPath(); ctx.roundRect(x, y, w, h, 4); ctx.fill();
-        } else {
-            ctx.fillRect(x, y, w, h);
-        }
-        ctx.fillStyle = '#fff';
-        ctx.font = '16px Kenney';
-        ctx.textAlign = 'center';
-        ctx.fillText(text, x + w/2, y + h/2 + 6);
-    }
-
     drawCardGraphic(ctx, card, x, y, faceDown = false) {
         if (faceDown) {
             if (this.cardBack && this.cardBack.complete && this.cardBack.naturalWidth > 0) {
@@ -358,7 +345,6 @@ export class BlackjackGame {
         }
     }
 
-    
     render(ctx) {
         const W = this.sm.canvas.width;
         const H = this.sm.canvas.height;
@@ -366,15 +352,10 @@ export class BlackjackGame {
         ctx.fillStyle = '#27ae60';
         ctx.fillRect(0, 0, W, H);
 
-        ctx.fillStyle = '#fff';
-        ctx.font = '20px Kenney';
-        ctx.textAlign = 'left';
-        ctx.fillText(`Bankroll: $${this.session.bankroll}`, 20, 30);
-
-        ctx.textAlign = 'right';
-        ctx.fillText(`Trainer [C]: ${this.trainerMode ? 'ON' : 'OFF'}`, W - 20, 30);
+        this.sm.drawHUD(ctx, this.session);
 
         if (this.state !== 'BETTING') {
+            ctx.fillStyle = '#fff';
             ctx.textAlign = 'center';
             ctx.fillText('DEALER', W/2, 80);
             let startX = W/2 - ((this.dealerHand.cards.length * 60) / 2) + 5;
@@ -420,10 +401,10 @@ export class BlackjackGame {
             ctx.fillStyle = '#fff';
             ctx.font = '30px Kenney';
             ctx.fillText('PLACE YOUR BET', W/2, H/2);
-            this.drawButton(ctx, W/2 - 120, H - 100, 40, 40, '-', '#34495e');
+            this.sm.drawButton(ctx, W/2 - 120, H - 100, 40, 40, '-', '#34495e');
             ctx.fillText(`$${this.currentBet}`, W/2, H - 72);
-            this.drawButton(ctx, W/2 + 80, H - 100, 40, 40, '+', '#34495e');
-            this.drawButton(ctx, W/2 - 50, H - 50, 100, 40, 'DEAL', '#27ae60');
+            this.sm.drawButton(ctx, W/2 + 80, H - 100, 40, 40, '+', '#34495e');
+            this.sm.drawButton(ctx, W/2 - 50, H - 50, 100, 40, 'DEAL', '#27ae60');
         }
 
         else if (this.state === 'PLAYER_TURN') {
@@ -433,10 +414,10 @@ export class BlackjackGame {
             const pending = this.playerHands.reduce((s, h) => s + h.bet, 0);
             const hasMoney = this.session.bankroll >= pending + hand.bet;
 
-            this.drawButton(ctx, W/2 - 190, H - 100, 80, 40, 'HIT', '#2980b9');
-            this.drawButton(ctx, W/2 - 90, H - 100, 80, 40, 'STAND', '#d35400');
-            this.drawButton(ctx, W/2 + 10, H - 100, 90, 40, 'DOUBLE', hasMoney && canDouble ? '#8e44ad' : '#7f8c8d');
-            this.drawButton(ctx, W/2 + 110, H - 100, 80, 40, 'SPLIT', hasMoney && canSplit ? '#16a085' : '#7f8c8d');
+            this.sm.drawButton(ctx, W/2 - 190, H - 100, 80, 40, 'HIT', '#2980b9');
+            this.sm.drawButton(ctx, W/2 - 90, H - 100, 80, 40, 'STAND', '#d35400');
+            this.sm.drawButton(ctx, W/2 + 10, H - 100, 90, 40, 'DOUBLE', hasMoney && canDouble ? '#8e44ad' : '#7f8c8d');
+            this.sm.drawButton(ctx, W/2 + 110, H - 100, 80, 40, 'SPLIT', hasMoney && canSplit ? '#16a085' : '#7f8c8d');
         }
 
         else if (this.state === 'TRAINER_PROMPT') {
@@ -454,7 +435,7 @@ export class BlackjackGame {
         }
 
         else if (this.state === 'PAYOUT') {
-            this.drawButton(ctx, W/2 -75, H - 100, 150, 40, 'NEXT HAND', '#2980b9');
+            this.sm.drawButton(ctx, W/2 -75, H - 100, 150, 40, 'NEXT HAND', '#2980b9');
 
             if (this.trainerMode) {
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
@@ -476,5 +457,6 @@ export class BlackjackGame {
                 }
             }
         }
+        this.sm.drawHUD(ctx, this.session);
     }
 }

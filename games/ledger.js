@@ -118,5 +118,7 @@ export class LedgerTerminal {
         ctx.fillStyle = themeColor;
         let sign = diff >= 0 ? '+' : '';
         ctx.fillText(`${sign}$${diff}`, w - 40, 80);
+
+        this.sm.drawHUD(ctx, this.session);
     }
 }

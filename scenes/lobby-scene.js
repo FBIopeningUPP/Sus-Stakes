@@ -58,8 +58,8 @@ export class LobbyScene {
             { id: 'poker', label: 'POKER', x: 250, y: 450, w: 96, h: 96 },
             { id: 'ledger', label: 'LEDGER', x: 550, y: 450, w: 96, h: 96 },
 
-            { id: 'shark', label: 'LOAN SHARK', x: 1050, y: 80, w: 96, h: 96 },
-            { id: 'poker', label: 'VIP POKER', x: 900, y: 250, w: 96, h: 96 }
+            { id: 'shark', label: 'LOAN SHARK', x: 150, y: 650, w: 96, h: 96 },
+            { id: 'poker', label: 'VIP POKER', x: 950, y: 200, w: 96, h: 96 }
         ];
 
         this.npcs = [];
@@ -72,7 +72,7 @@ export class LobbyScene {
             this.npcs.push(new NPC(nx, ny, c, 80 + Math.random() * 50));
         }
 
-        this.bouncer = new NPC(this.mapW - 320, 400, '#000', 0);
+        this.bouncer = new NPC(1080, 440, '#000', 0);
         this.bouncer.state = 'IDLE';
         this.bouncer.timer = 0;
         this.bouncer.w = 40;
@@ -117,23 +117,14 @@ export class LobbyScene {
 
         const p = this.player.getRect();  
 
-        this.isNearBouncer = false;
-        let bx = this.bouncer.x;
-        let by = this.bouncer.y;
+        this.nearBouncer = false;
 
-        if (Math.hypot((this.player.x)-bx, (this.player.y)-by) < 80) {
-            this.isNearBouncer = true;
-            if (this.keys['e'] || this.keys['E']) {
-                this.keys['e'] = false;
-                this.keys['E'] = false;
-                if (this.session.bankroll < 25000) {
-                    alert("BOUNCER: VIPs only. Come back when you have $25,000, scrub.");
-                    this.player.y += 60;
-                    this.sm.audio.playLose();
-                } else {
-                    alert("BOUNCER: Right this way, boss.");
-                    this.player.y -= 80;
-                    this.sm.audio.playWin();
+        if (this.player.y < 450 && this.player.x > 800) {
+            if (this.session.bankroll < 25000) {
+                this.player.y = 450;
+
+                if (Math.random() < 0.5) {
+                    this.sm.spawnFloatingText("VIP ONLY ($25k)", this.player.x, this.player.y, '#e74c3c');
                 }
             }
         }
@@ -244,13 +235,6 @@ export class LobbyScene {
             ctx.font = '20px Kenney';
             ctx.textAlign = 'center';
             ctx.fillText("Press E to interact", this.activeCabinet.x + this.activeCabinet.w/2, this.activeCabinet.y - 40);
-        }
-
-        if (this.isNearBouncer) {
-            ctx.fillStyle = '#e74c3c';
-            ctx.font = '20px Kenney';
-            ctx.textAlign = 'center';
-            ctx.fillText("Press E to Bribe Bouncer", this.bouncer.x + 20, this.bouncer.y - 20);
         }
 
         ctx.restore();
