@@ -17,7 +17,7 @@ export class BlackjackGame {
             for (let r of ranks) {
                 let img = new Image();
                 img.src = `assets/cards/card_${s}_${r}.png`;
-                this.cardCache[`${r}_${s}`] = img;
+                this.cardCache[`${s}_${r}`] = img;
             }
         }
 
@@ -333,7 +333,7 @@ export class BlackjackGame {
             ctx.fillRect(x, y, w, h);
         }
         ctx.fillStyle = '#fff';
-        ctx.font = '16px monospace';
+        ctx.font = '16px Kenney';
         ctx.textAlign = 'center';
         ctx.fillText(text, x + w/2, y + h/2 + 6);
     }
@@ -367,7 +367,7 @@ export class BlackjackGame {
         ctx.fillRect(0, 0, W, H);
 
         ctx.fillStyle = '#fff';
-        ctx.font = '20px monospace';
+        ctx.font = '20px Kenney';
         ctx.textAlign = 'left';
         ctx.fillText(`Bankroll: $${this.session.bankroll}`, 20, 30);
 
@@ -394,7 +394,7 @@ export class BlackjackGame {
             for (let i = 0; i < this.playerHands.length; i++) {
                 const hand = this.playerHands[i];
                 ctx.fillStyle = (i === this.activeHandIndex && this.state === 'PLAYER_TURN') ? '#f1c40f' : '#fff';
-                ctx.font = '16px monospace';
+                ctx.font = '16px Kenney';
                 ctx.fillText(`HAND ${i+1} ($${hand.bet})`, px, H/2 - 10);
 
                 let cx = px - ((hand.cards.length * 40) / 2) + 5;
@@ -418,7 +418,7 @@ export class BlackjackGame {
         if (this.state === 'BETTING') {
             ctx.textAlign = 'center';
             ctx.fillStyle = '#fff';
-            ctx.font = '30px monospace';
+            ctx.font = '30px Kenney';
             ctx.fillText('PLACE YOUR BET', W/2, H/2);
             this.drawButton(ctx, W/2 - 120, H - 100, 40, 40, '-', '#34495e');
             ctx.fillText(`$${this.currentBet}`, W/2, H - 72);
@@ -443,12 +443,12 @@ export class BlackjackGame {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
             ctx.fillRect(0, 0, W, H);
             ctx.fillStyle = '#fff';
-            ctx.font = '24px monospace';
+            ctx.font = '24px Kenney';
             ctx.textAlign = 'center';
             ctx.fillText("What is the Running Count?", W/2, H/2 - 20);
             ctx.fillStyle = '#f1c40f';
             ctx.fillText(this.trainerInput || '_', W/2, H/2 + 20);
-            ctx.font = '16px monospace';
+            ctx.font = '16px Kenney';
             ctx.fillStyle = '#bdc3c7';
             ctx.fillText("Press number and press Enter", W/2, H/2 + 60);
         }

@@ -25,11 +25,11 @@ export class LedgerTerminal {
         ctx.fillStyle = '#0a0a0a';
         ctx.fillRect(0, 0, w, h);
 
-        ctx.font = 'bold 24px monospace';
+        ctx.font = 'bold 24px Kenney';
         ctx.textAlign = 'left';
         ctx.fillStyle = '#fff';
         ctx.fillText('SUS STAKES PORTFOLIO', 40, 40);
-        ctx.font = '14px monospace';
+        ctx.font = '14px Kenney';
         ctx.fillStyle = '#666';
         ctx.fillText('Press ESC to exit', 40, 60);
 
@@ -109,12 +109,12 @@ export class LedgerTerminal {
         ctx.shadowBlur = 0;
 
         ctx.fillStyle = '#fff';
-        ctx.font = 'bold 36px monospace';
+        ctx.font = 'bold 36px Kenney';
         ctx.textAlign = 'right';
         ctx.fillText(`$${hist[hist.length-1]}`, w - 40, 50);
 
         let diff = hist[hist.length-1] - hist[0];
-        ctx.font = '18px monospace';
+        ctx.font = '18px Kenney';
         ctx.fillStyle = themeColor;
         let sign = diff >= 0 ? '+' : '';
         ctx.fillText(`${sign}$${diff}`, w - 40, 80);

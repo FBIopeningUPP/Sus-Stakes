@@ -125,7 +125,7 @@ export class LobbyScene {
         for (let w of this.walls) ctx.fillRect(w.x, w.y, w.w, w.h);
 
         ctx.fillStyle = '#fff';
-        ctx.font = '20px monospace';
+        ctx.font = '20px Kenney';
         ctx.textAlign = 'left';
         ctx.fillText(`Bankroll: $${this.session.bankroll}`, 20, 30);
 
@@ -143,7 +143,7 @@ export class LobbyScene {
             }
 
             ctx.fillStyle = '#fff';
-            ctx.font = '14px monospace';
+            ctx.font = '14px Kenney';
             ctx.textAlign = 'left';
             ctx.fillText(cab.label, cab.x, cab.y - 10);
         }
@@ -152,7 +152,7 @@ export class LobbyScene {
 
         if (this.activeCabinet) {
             ctx.fillStyle = '#2ecc71';
-            ctx.font = '18px monospace';
+            ctx.font = '18px Kenney';
             ctx.textAlign = 'left';
 
             ctx.fillText("Press E to interact", this.activeCabinet.x - 20, this.activeCabinet.y - 30);

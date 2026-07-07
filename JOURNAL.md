@@ -82,4 +82,12 @@ i will be fixing the main green box on screen with the main character png file
 https://www.kenney.nl/assets/playing-cards-pack downloaded these assets
 https://www.kenney.nl/assets/kenney-fonts and this font
 
-will be upadting my code with this cards are not appearing properly going to be fix it
+will be upadting my code with this cards are not appearing properly going to be fix it, cards are appearing and font is here 
+
+added slots assets 
+
+https://cazwolf.itch.io/pixel-slot-machine?download
+
+will update the slots.js game to fix the new asset
+
+well the thing is not working need to fix it

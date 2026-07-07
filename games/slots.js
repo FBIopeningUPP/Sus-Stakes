@@ -33,6 +33,15 @@ export class SlotsGame {
                 this.sm.changeScene(new LobbyScene(this.sm, this.session, this.returnPosition));
             }
         };
+
+        this.layerReels = new Image();
+        this.layerReels.src = 'assets/slots/slot-machine5.png';
+        this.layerReels = new Image();
+        this.layerReels.src = 'assets/slots/slot-machine4.png';
+        this.layerReels = new Image();
+        this.layerReels.src = 'assets/slots/slot-machine2.png';
+        this.layerReels = new Image();
+        this.layerReels.src = 'assets/slots/slot-machine3.png';
     }
 
     init() {
@@ -101,7 +110,7 @@ export class SlotsGame {
         ctx.fillRect(x, y, w, h);
         ctx.shadowColor = 'transparent';
         ctx.fillStyle = '#fff';
-        ctx.font = '16px monospace';
+        ctx.font = '16px Kenney';
         ctx.textAlign = 'center';
         ctx.fillText(text, x + w/2, y + h/2 + 6);
     }
@@ -137,17 +146,21 @@ export class SlotsGame {
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, W, H);
         ctx.fillStyle = '#fff';
-        ctx.font = '20px monospace';
+        ctx.font = '20px Kenney';
         ctx.textAlign = 'left';
         ctx.fillText(`Bankroll: $${this.session.bankroll}`, 20, 30);
 
         const mx = W/2 - 200;
         const my = H/2 - 175;
 
-        ctx.fillStyle = '#f1c40f';
-        ctx.fillRect(mx - 10, my - 10, 420, 270);
-        ctx.fillStyle = '#000';
-        ctx.fillRect(mx, my, 400, 250);
+        const drawX = mx - 100;
+        const drawY = my - 150;
+        const drawW = 600;
+        const drawH = 500;
+
+        if (this.layerReels.complete && this.layerReels.naturalWidth > 0) {
+            ctx.drawImage(this.layerReels, drawX, drawY, drawW, drawH);
+        }
 
         const rWidth = 100;
         const rHeight = 150;
@@ -162,7 +175,7 @@ export class SlotsGame {
             ctx.fillRect(cx, ry, rWidth, rHeight);
 
             ctx.fillStyle = '#000';
-            ctx.font = '18px monospace';
+            ctx.font = '18px Kenney';
 
             let displaySym = this.reels[i];
 
@@ -178,10 +191,19 @@ export class SlotsGame {
             }
 
             ctx.fillText(displaySym, cx + rWidth/2, ry + rHeight/2 + 6);
+
+            if (this.layerCover.complete && this.layerCover.naturalWidth > 0) {
+                ctx.drawImage(this.layerCover, drawX, drawY, drawW, drawH);
+            }
+
+            let lever = (this.state === 'SPINNING') ? this.leverDown : this.leverUp;
+            if (lever.complete && lever.naturalWidth > 0) {
+                ctx.drawImage(lever, drawX, drawY, drawW, drawH);
+            }
         }
 
         ctx.fillStyle = '#fff';
-        ctx.font = '24px monospace';
+        ctx.font = '24px Kenney';
         if (this.state === 'RESULT') {
             if (this.lastWin > 0) {
                 ctx.shadowColor = '#2ecc71';
@@ -200,7 +222,7 @@ export class SlotsGame {
         if (this.state === 'IDLE' || this.state === 'RESULT') {
             this.drawButton(ctx, W/2 - 120, H - 100, 40, 40, '-', '#34495e');
             ctx.fillStyle = '#fff';
-            ctx.font = '30px monospace';
+            ctx.font = '30px Kenney';
             ctx.fillText(`Bet: ${this.currentBet}`, W/2, H - 72);
             this.drawButton(ctx, W/2 + 80, H - 100, 40, 40, '+', '#34495e');
 

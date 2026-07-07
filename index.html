@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>Sus Stakes</title>
     <style>
         body, html {
             margin: 0;
@@ -23,15 +23,20 @@
             height: 100%;
             image-rendering: pixelated;
         }
-      @font-face {
-          font-family: 'monospace'; /* Hijack the default font! */
-          src: url('assets/fonts/Kenney Pixel Square.ttf'); /* Use whichever font you like */
-      }
+
+        @font-face {
+            font-family: 'Kenney';
+            src: url('assets/fonts/Kenney%20Pixel%20Square.ttf');
+        }
     </style>
 </head>
 
 <body>
+        <!-- Hidden div forces the browser to download the font instantly -->
+    <div style="font-family: 'Kenney'; visibility: hidden; position: absolute;">preload</div>
+
     <canvas id="gameCanvas"></canvas>
+
     <script type="module" src="./main.js"></script>
 </body>
 </html>
