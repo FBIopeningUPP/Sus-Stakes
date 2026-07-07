@@ -45,11 +45,9 @@ export class LobbyScene {
             { x: 0, y: this.mapH - thick, w: this.mapW, h: thick },
             { x: 0, y: 0, w: thick, h: this.mapH },
             { x: this.mapW - thick, y: 0, w: thick, h: this.mapH },
-            { x: this.mapW - 600, y: 0, w: thick, h: 400 },
-            { x: this.mapW - 600, y: 400, w: 600, h: thick },
-            { x: this.mapW - 600, y: 400, w: 200, h: thick },
+
             { x: 800, y: 0, w: thick, h: 440 },
-            { x: 800, y: 440, w: 400, h: thick },
+            { x: 800, y: 440, w: 250, h: thick },
         ];
 
         this.cabinets = [
