@@ -107,10 +107,13 @@ export class LobbyScene {
                 this.sm.changeScene(new SlotsGame(this.sm, this.session, this.activeCabinet.id, returnPos));
             } else if (this.activeCabinet.id === 'ledger') {
                 this.sm.changeScene(new LedgerTerminal(this.sm, this.session, this.activeCabinet.id, returnPos));
+            } else if (this.activeCabinet.id === 'poker') {
+                this.sm.changeScene(new PokerGame(this.sm, this.session, this.activeCabinet.id, returnPos));
             } else if (this.activeCabinet.id === 'shark') {
                 if (this.session.bankroll < 50) {
                     alert("SHARK: BOI HERE's YO 1000 dolla dolla, now you owe me 1500 dolla dolla, i will be grabbing all yo 20% form yo win");
-                } else {
+                    this.session.takeLoan();
+            } else {
                     alert("SHARK: You still got chips. Come back when you're actually broke, kid.");
                 }
             } else {

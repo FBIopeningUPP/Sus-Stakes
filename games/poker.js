@@ -33,8 +33,7 @@ export class PokerGame {
 
     loadCards() {
         const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
-        const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-
+        const ranks = ['02', '03', '04', '05', '06', '07', '08', '09', '10', 'J', 'Q', 'K', 'A'];
         for (let s of suits) {
             for (let r of ranks) {
                 let img = new Image();
@@ -205,7 +204,7 @@ export class PokerGame {
     drawCardGraphic(ctx, card, x, y) {
         if (!card) return;
         let img = this.cardImages[`${card.suit}_${card.rankStr}`];
-        if (img && img.complete) {
+        if (img && img.complete && img.naturalWidth > 0) {
             ctx.drawImage(img, x, y, 80, 120);
         }
     }
