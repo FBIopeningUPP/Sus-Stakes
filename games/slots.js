@@ -100,6 +100,10 @@ export class SlotsGame {
 
         if  (this.reels[0] === this.reels[1] && this.reels[1] === this.reels[2]) {
             payout = this.currentBet * this.payouts[this.reels[0]];
+
+            this.sm.shake(500, 15);
+            this.sm.spawnConfetti(this.sm.canvas.width / 2, this.sm.canvas.height / 2 - 100, 200);
+            this.sm.spawnFloatingText(`+$${payout}!`, this.sm.canvas.width / 2, this.sm.canvas.height / 2 - 150, '#2ecc71');
         }
         this.lastWin = payout;
         this.session.addTransaction(this.gameId, this.currentBet, payout);

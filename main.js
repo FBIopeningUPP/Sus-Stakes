@@ -19,6 +19,8 @@ resizeCanvas();
 const session = new CasinoSession();
 session.load();
 
+window.cheat = session;
+
 const sceneManager = new SceneManager(canvas, ctx);
 const mouse = { x: 0, y: 0 };
 
