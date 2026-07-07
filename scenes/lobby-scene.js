@@ -17,8 +17,8 @@ export class LobbyScene {
         this.session = session;
         this.keys = {};
 
-        this.mapW = 2000;
-        this.mapH = 1500;
+        this.mapW = 1200;
+        this.mapH = 800;
 
         this.camera = new Camera(this.canvas.width, this.canvas.height, this.mapW, this.mapH);
         
@@ -45,21 +45,23 @@ export class LobbyScene {
             { x: 0, y: this.mapH - thick, w: this.mapW, h: thick },
             { x: 0, y: 0, w: thick, h: this.mapH },
             { x: this.mapW - thick, y: 0, w: thick, h: this.mapH },
-
             { x: this.mapW - 600, y: 0, w: thick, h: 400 },
             { x: this.mapW - 600, y: 400, w: 600, h: thick },
             { x: this.mapW - 600, y: 400, w: 200, h: thick },
+            { x: 800, y: 0, w: thick, h: 440 },
+            { x: 800, y: 440, w: 400, h: thick },
         ];
 
         this.cabinets = [
-            { id: 'slots', label: 'SLOTS', x: 300, y: 200, w: 96, h: 96 },
-            { id: 'slots', label: 'SLOTS', x: 450, y: 200, w: 96, h: 96 },
-            { id: 'blackjack', label: 'BLACKJACK', x: 600, y: 200, w: 96, h: 96 },
-            { id: 'poker', label: 'POKER', x: 750, y: 200, w: 96, h: 96 },
-            { id: 'ledger', label: 'LEDGER', x: 900, y: 200, w: 96, h: 96 },
-            { id: 'roulette', label: 'ROULETTE', x: 1050, y: 200, w: 96, h: 96 },
-            { id: 'shark', label: 'LOAN SHARK', x: 300, y: 400, w: 96, h: 96 },
-            { id: 'poker', label: 'POKER', x: 450, y: 400, w: 96, h: 96 },
+            { id: 'slots', label: 'SLOTS', x: 200, y: 150, w: 96, h: 96 },
+            { id: 'blackjack', label: 'BLACKJACK', x: 400, y: 150, w: 96, h: 96 },
+            { id: 'roulette', label: 'ROULETTE', x: 600, y: 150, w: 96, h: 96 },
+
+            { id: 'poker', label: 'POKER', x: 300, y: 450, w: 96, h: 96 },
+            { id: 'ledger', label: 'LEDGER', x: 500, y: 450, w: 96, h: 96 },
+
+            { id: 'shark', label: 'LOAN SHARK', x: 950, y: 100, w: 96, h: 96 },
+            { id: 'poker', label: 'VIP POKER', x: 950, y: 250, w: 96, h: 96 }
         ];
 
         this.npcs = [];
@@ -183,20 +185,40 @@ export class LobbyScene {
         ctx.save();
         ctx.translate(-this.camera.x, -this.camera.y);
 
-        ctx.fillStyle = '#34495e';
+        ctx.fillStyle = '#c0392b';
         ctx.fillRect(0, 0, this.mapW, this.mapH);
 
-        ctx.fillStyle = '#8e44ad';
-        ctx.fillRect(0, 0, this.mapW, 40);
+        ctx.fillStyle = '#a93226';
+        const tileSize = 50;
+        for (let x = 0; x < this.mapW; x += tileSize) {
+            for (let y = 0; y < this.mapH; y += tileSize) {
+                if ((Math.floor(x/tileSize) + Math.floor(y/tileSize)) % 2 === 0) {
+                    ctx.fillRect(x, y, tileSize, tileSize);
+                }
+            }
+        }
 
-        ctx.fillStyle = 'rgba(0,0,0,0.2)';
-        ctx.font = '100px Kenney';
-        ctx.textAlign = 'center';
-        ctx.fillText("SUS STAKES MEGA CASINO", this.mapW/2, this.mapH/2);
-        ctx.fillText("VIP ROOM", this.mapW - 300, 200);
+        ctx.fillStyle = '#111';
+        ctx.fillRect(800, 0, 400, 440);
 
-        ctx.fillStyle = '#95a5a6';
-        for (let w of this.walls) ctx.fillRect(w.x, w.y, w.w, w.h);
+        ctx.fillStyle = '#f1c40f';
+        for (let x = 800; x < this.mapW; x += tileSize) {
+            for (let y = 0; y < 440; y += tileSize) {
+                if ((Math.floor(x/tileSize) + Math.floor(y/tileSize)) % 2 === 0) {
+                    ctx.fillRect(x, y, tileSize, tileSize);
+                }
+            }
+        }
+
+        for (let w of this.walls) {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            ctx.fillRect(w.x + 15, w.y + 15, w.w, w.h);
+
+            ctx.fillStyle = '#7f8c8d';
+            ctx.fillRect(w.x, w.y, w.w, w.h);
+            ctx.fillStyle = '#bdc3c7';
+            ctx.fillRect(w.x + 5, w.y + 5, w.w, w.h /2);
+        }
 
         for (let cab of this.cabinets) {
             if (this.images[cab.id] && this.images[cab.id].complete && this.images[cab.id].naturalWidth > 0) {
