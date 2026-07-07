@@ -17,7 +17,7 @@ export class PokerGame {
 
         this.onKeyDown = (e) => {
             if (e.key === 'Escape') {
-                this.sm.spawnFloatingText("TEXAS HOLD'EM", this.sm.canvas.width/2, 100, '#f1c40f');
+                this.sm.changeScene(new LobbyScene(this.sm, this.session, this.returnPosition));
             }
         };
     }
