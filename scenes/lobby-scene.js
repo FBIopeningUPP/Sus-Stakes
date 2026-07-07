@@ -57,7 +57,7 @@ export class LobbyScene {
             { id: 'blackjack', label: 'BLACKJACK', x: 600, y: 200, w: 96, h: 96 },
             { id: 'poker', label: 'POKER', x: 750, y: 200, w: 96, h: 96 },
             { id: 'ledger', label: 'LEDGER', x: 900, y: 200, w: 96, h: 96 },
-            { id: 'roulette', label: 'ROULETTE', x: 750, y: 200, w: 96, h: 96 },
+            { id: 'roulette', label: 'ROULETTE', x: 1050, y: 200, w: 96, h: 96 },
             { id: 'shark', label: 'LOAN SHARK', x: 300, y: 400, w: 96, h: 96 },
             { id: 'poker', label: 'POKER', x: 450, y: 400, w: 96, h: 96 },
         ];

@@ -44,7 +44,7 @@ export class RouletteGame {
 
         this.wheelVelocity = 0.05 + Math.random() * 0.02;
         this.ballVelocity = -(0.1 + Math.random() * 0.05);
-        this.ballRadius = 140; // Ball starts on the outer rim
+        this.ballRadius = 220; 
 
         this.sm.audio.playCoin();
     }
@@ -62,8 +62,8 @@ export class RouletteGame {
                 if (Math.random() < 0.2) this.sm.audio.playTick();
             }
 
-            if (this.ballRadius <= 90) {
-                this.ballRadius = 90;
+            if (this.ballRadius <= 150) {
+                this.ballRadius = 150;
                 this.ballVelocity = this.wheelVelocity; 
 
                 if (this.wheelVelocity < 0.001) {
@@ -87,7 +87,7 @@ export class RouletteGame {
 
         let segment = (Math.PI * 2) / 37;
 
-        let index = Math.floor((Math.PI * 2 - relativeAngle) / segment);
+        let index = Math.floor(relativeAngle / segment);
         index = (index + 37) % 37;
 
         this.winningNumber = this.wheelNumbers[index];
